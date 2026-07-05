@@ -1,0 +1,92 @@
+export const faqs = [
+  {
+    id: 1,
+    question: 'What information do I need for my consultation?',
+    answer: 'For accurate readings, please provide your birth date, time, and place. If you don\'t have the exact birth time, we can work with an approximate time, though the reading will be less precise.',
+    category: 'General',
+  },
+  {
+    id: 2,
+    question: 'How long does a consultation last?',
+    answer: 'Consultations range from 30 to 120 minutes depending on the service. Standard consultations are 60 minutes, providing deep analysis and comprehensive guidance.',
+    category: 'Services',
+  },
+  {
+    id: 3,
+    question: 'Can I book an urgent consultation?',
+    answer: 'Yes, we offer urgent consultations with expedited booking. These are available within 24 hours at a premium rate and are perfect when you need immediate guidance.',
+    category: 'Booking',
+  },
+  {
+    id: 4,
+    question: 'What is the waiting period for appointments?',
+    answer: 'Standard waiting periods range from 2-7 days depending on consultant availability. Urgent slots may be available the same day or next day at premium rates.',
+    category: 'Booking',
+  },
+  {
+    id: 5,
+    question: 'Are consultations done online or in-person?',
+    answer: 'Most consultations are done online via video call for convenience. Vastu consultations can be online or in-person depending on your preference.',
+    category: 'Services',
+  },
+  {
+    id: 6,
+    question: 'What are the most popular services?',
+    answer: 'Our most popular services are Vedic Astrology readings and Kundli analysis. The combined Astrology + Numerology package is also highly requested for comprehensive insights.',
+    category: 'Services',
+  },
+  {
+    id: 7,
+    question: 'Can remedies guarantee results?',
+    answer: 'Remedies are based on time-tested Vedic principles, but results depend on sincere practice and personal effort. We guide you through proper implementation for best outcomes.',
+    category: 'Remedies',
+  },
+  {
+    id: 8,
+    question: 'How often should I get a consultation?',
+    answer: 'For most people, an annual consultation is ideal. However, major life transitions, business decisions, or personal challenges warrant more frequent guidance.',
+    category: 'General',
+  },
+  {
+    id: 9,
+    question: 'Do you offer refunds?',
+    answer: 'We stand behind our services. If you\'re unsatisfied with your consultation, contact us within 48 hours for a full refund or rescheduling option.',
+    category: 'Booking',
+  },
+  {
+    id: 10,
+    question: 'Can children get consultations?',
+    answer: 'Yes, children can benefit from astrological insights. We offer special rates for young clients and parents are welcome to join for guidance.',
+    category: 'General',
+  },
+  {
+    id: 11,
+    question: 'What is Vastu Shastra?',
+    answer: 'Vastu Shastra is an ancient Indian science of architecture and spatial arrangement. It uses directional energy and elements to create harmonious, prosperous spaces.',
+    category: 'Services',
+  },
+  {
+    id: 12,
+    question: 'Can numerology help with business?',
+    answer: 'Absolutely! Numerology can guide business naming, timing important decisions, and choosing auspicious dates for launches or expansions.',
+    category: 'Services',
+  },
+  {
+    id: 13,
+    question: 'What happens during a Puja?',
+    answer: 'A Puja is a ritualistic ceremony performed by a qualified priest. It involves prayers, offerings, and chanting to invoke positive energies and blessings.',
+    category: 'Services',
+  },
+  {
+    id: 14,
+    question: 'How do I prepare for my consultation?',
+    answer: 'Have your birth details ready, find a quiet place, and be open-minded. Write down specific questions beforehand to make the most of your session.',
+    category: 'General',
+  },
+  {
+    id: 15,
+    question: 'Can I get a refund if I cancel?',
+    answer: 'Cancellations made 48+ hours before the appointment get a full refund. Cancellations within 24 hours incur a 25% fee. No-shows are non-refundable.',
+    category: 'Booking',
+  },
+];
