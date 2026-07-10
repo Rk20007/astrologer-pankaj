@@ -1,11 +1,28 @@
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import FloatingButtons from '@/components/FloatingButtons';
+import SmartImage from '@/components/SmartImage';
 
 export const metadata = {
-  title: 'About Us | Astrology Consultation Services',
-  description: 'Learn about our expert astrology consultants and their experience.',
+  title: 'About Bhawna Ma\'am | Astrologer & Vastu Consultant',
+  description: 'Meet Bhawna Ma\'am — TEDx speaker, astrologer and Vastu consultant with 15+ years of experience guiding people to shift their energies.',
 };
+
+// Photos of Bhawna Ma'am for the gallery.
+const bhawnaGallery = [
+  { src: '/bhawna-15.jpg', caption: 'TEDx: “Shift Your Energies”' },
+  { src: '/bhawna-13.jpg', caption: 'On the TEDx stage' },
+  { src: '/bhawna-14.jpg', caption: 'TEDx talk' },
+  { src: '/bhawna-05.jpg', caption: 'At Kamakhya Temple' },
+  { src: '/bhawna-04.jpg', caption: 'Ceremony & blessings' },
+  { src: '/bhawna-12.jpg', caption: 'Honoured at the temple' },
+  { src: '/bhawna-010.jpg', caption: 'With spiritual leaders' },
+  { src: '/bhawna-09.jpg', caption: 'At a spiritual gathering' },
+  { src: '/bhawna-11.jpg', caption: 'Meeting devotees' },
+  { src: '/bhawna-07.jpg', caption: 'With clients' },
+  { src: '/bhawna-06.jpg', caption: 'With clients' },
+  { src: '/bhawna-01.jpg', caption: 'With clients' },
+];
 
 export default function AboutPage() {
   return (
@@ -21,6 +38,67 @@ export default function AboutPage() {
             <p className="text-xl text-muted-foreground max-w-3xl">
               Dedicated to providing authentic and accurate astrology guidance with over 20 years of combined experience.
             </p>
+          </div>
+        </section>
+
+        {/* Featured: Bhawna Ma'am */}
+        <section className="py-16 bg-background">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+              <div className="relative rounded-2xl overflow-hidden ring-1 ring-border shadow-lg aspect-[4/5] bg-muted">
+                <SmartImage
+                  src="/bhawna-05.jpg"
+                  alt="Bhawna Ma'am — Astrologer & Vastu Consultant"
+                  className="w-full h-full object-cover object-top"
+                />
+                <span className="absolute top-4 left-4 px-3 py-1 bg-primary text-white rounded-full text-xs font-semibold uppercase tracking-wide shadow">
+                  TEDx Speaker
+                </span>
+              </div>
+              <div>
+                <span className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-4 uppercase tracking-wide">
+                  Meet Your Guide
+                </span>
+                <h2 className="font-serif text-4xl font-bold text-foreground mb-4">Bhawna Ma&apos;am</h2>
+                <p className="text-primary font-semibold mb-6">Astrologer &amp; Vastu Consultant • 15+ Years Experience</p>
+                <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                  A TEDx speaker and trusted astrologer, Bhawna Ma&apos;am combines traditional Vedic
+                  astrology and Vastu Shastra with modern psychology to help people shift their energies
+                  and transform their personal and professional lives.
+                </p>
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  From temple ceremonies across India to the TEDx stage, her mission stays the same —
+                  practical, compassionate guidance rooted in ancient wisdom.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Bhawna Gallery */}
+        <section className="py-16 bg-muted/30">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="font-serif text-4xl font-bold text-foreground text-center mb-4">Gallery</h2>
+            <p className="text-center text-muted-foreground max-w-2xl mx-auto mb-12">
+              Moments from Bhawna Ma&apos;am&apos;s journey — talks, temple visits, and consultations.
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {bhawnaGallery.map((photo, i) => (
+                <figure
+                  key={i}
+                  className="group relative rounded-xl overflow-hidden aspect-[3/4] bg-muted ring-1 ring-border"
+                >
+                  <SmartImage
+                    src={photo.src}
+                    alt={photo.caption}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <figcaption className="absolute inset-x-0 bottom-0 p-3 text-xs font-medium text-white bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                    {photo.caption}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
           </div>
         </section>
 

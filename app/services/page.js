@@ -3,8 +3,7 @@ import Footer from '@/components/Footer';
 import FloatingButtons from '@/components/FloatingButtons';
 import { services, consultants } from '@/data/services';
 import ServiceCard from '@/components/ServiceCard';
-import { motion } from 'framer-motion';
-import { Users } from 'lucide-react';
+import SmartImage from '@/components/SmartImage';
 
 export const metadata = {
   title: 'Professional Astrology Services | Consultation & Readings',
@@ -31,13 +30,47 @@ export default function ServicesPage() {
           </div>
         </section>
 
-        {/* Pankaj Sir Services */}
+        {/* Bhawna Ma'am Services (Featured) */}
         <section className="py-16 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-12">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-gold flex items-center justify-center text-white font-serif font-bold text-lg">
-                  ♂
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-16 h-16 rounded-full overflow-hidden ring-2 ring-primary/40 flex-shrink-0 bg-muted">
+                  <SmartImage
+                    src="/consultants/bhawna.jpg"
+                    alt="Bhawna Ma'am"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h2 className="font-serif text-3xl font-bold text-foreground">Bhawna Ma&apos;am</h2>
+                    <span className="px-2.5 py-0.5 bg-primary/10 text-primary rounded-full text-xs font-semibold uppercase tracking-wide">Featured</span>
+                  </div>
+                  <p className="text-muted-foreground">Astrologer & Vastu Consultant • TEDx Speaker • 15+ Years Experience</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+              {bhawnaServices.map((service) => (
+                <ServiceCard key={service.id} service={service} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Pankaj Sir Services */}
+        <section className="py-16 bg-muted/30">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mb-12">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-16 h-16 rounded-full overflow-hidden ring-2 ring-border flex-shrink-0 bg-muted">
+                  <SmartImage
+                    src="/consultants/pankaj.jpg"
+                    alt="Pankaj Sir"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div>
                   <h2 className="font-serif text-3xl font-bold text-foreground">Pankaj Sir</h2>
@@ -46,31 +79,8 @@ export default function ServicesPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-              {pankajServices.map((service) => (
-                <ServiceCard key={service.id} service={service} />
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Bhawna Ma'am Services */}
-        <section className="py-16 bg-muted/30">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="mb-12">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-secondary to-dark-red flex items-center justify-center text-white font-serif font-bold text-lg">
-                  ♀
-                </div>
-                <div>
-                  <h2 className="font-serif text-3xl font-bold text-foreground">Bhawna Ma&apos;am</h2>
-                  <p className="text-muted-foreground">Astrologer & Life Coach • 15+ Years Experience</p>
-                </div>
-              </div>
-            </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {bhawnaServices.map((service) => (
+              {pankajServices.map((service) => (
                 <ServiceCard key={service.id} service={service} />
               ))}
             </div>
@@ -87,8 +97,15 @@ export default function ServicesPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
               {consultants.map((consultant) => (
                 <div key={consultant.id} className="bg-card border border-border rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
-                  <div className="h-64 bg-gradient-to-br from-primary/10 via-gold/10 to-accent/10 flex items-center justify-center text-6xl">
-                    {consultant.id === 'pankaj' ? '♂' : '♀'}
+                  <div className="h-72 bg-gradient-to-br from-primary/10 via-gold/10 to-accent/10 relative">
+                    <SmartImage
+                      src={consultant.image}
+                      alt={consultant.name}
+                      className="w-full h-full object-cover object-top"
+                    />
+                    {consultant.featured && (
+                      <span className="absolute top-3 left-3 px-2.5 py-0.5 bg-primary text-white rounded-full text-xs font-semibold uppercase tracking-wide shadow">Featured</span>
+                    )}
                   </div>
                   <div className="p-8">
                     <h3 className="font-serif text-2xl font-bold text-foreground mb-1">

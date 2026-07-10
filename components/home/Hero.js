@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Button from '@/components/Button';
+import SmartImage from '@/components/SmartImage';
 
 export default function HomeHero() {
   return (
@@ -62,7 +63,7 @@ export default function HomeHero() {
               className="inline-block"
             >
               <span className="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold uppercase tracking-wide">
-                Ancient Wisdom, Modern Guidance
+                Bhawna Upadhyay • TEDx Speaker
               </span>
             </motion.div>
 
@@ -72,9 +73,9 @@ export default function HomeHero() {
               transition={{ delay: 0.3 }}
               className="font-serif text-5xl sm:text-6xl font-bold text-foreground leading-tight"
             >
-              Discover Your Cosmic{' '}
+              Shift Your Energies with{' '}
               <span className="bg-gradient-to-r from-primary via-gold-light to-accent bg-clip-text text-transparent">
-                Destiny
+                Bhawna Upadhyay
               </span>
             </motion.h1>
 
@@ -84,7 +85,7 @@ export default function HomeHero() {
               transition={{ delay: 0.4 }}
               className="text-lg text-muted-foreground leading-relaxed max-w-xl"
             >
-              Expert astrology, numerology, and Vastu guidance from India's most trusted consultants. Transform your life with ancient wisdom and modern insights.
+              A TEDx speaker, astrologer, and Vastu consultant with 15+ years of experience, Bhawna Upadhyay blends ancient Vedic wisdom with modern insight — offering personalised astrology, Kundli, and Vastu guidance to transform your life.
             </motion.p>
 
             {/* CTA Buttons */}
@@ -128,68 +129,21 @@ export default function HomeHero() {
             </motion.div>
           </motion.div>
 
-          {/* Right Visual Element - Sacred Mandala */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative h-96 md:h-full flex items-center justify-center"
-          >
-            {/* Outer Zodiac Ring */}
-            <motion.div
-              animate={{
-                rotate: 360,
-              }}
-              transition={{
-                duration: 40,
-                repeat: Infinity,
-                ease: 'linear',
-              }}
-              className="absolute w-80 h-80 rounded-full border-2 border-primary/30 shadow-[0_0_40px_rgba(212,175,55,0.2)]"
-            />
-
-            {/* Sacred Mandala Circles */}
-            <motion.div
-              animate={{
-                rotate: -360,
-              }}
-              transition={{
-                duration: 25,
-                repeat: Infinity,
-                ease: 'linear',
-              }}
-              className="absolute w-64 h-64 rounded-full border-2 border-accent/40 shadow-[0_0_30px_rgba(244,208,111,0.15)]"
-            />
-
-            {/* Inner Circle */}
-            <motion.div
-              animate={{
-                rotate: 360,
-              }}
-              transition={{
-                duration: 15,
-                repeat: Infinity,
-                ease: 'linear',
-              }}
-              className="absolute w-48 h-48 rounded-full border-2 border-primary/60 shadow-[inset_0_0_30px_rgba(212,175,55,0.2)]"
-            />
-
-            {/* Central Element - Om Symbol */}
-            <motion.div
-              animate={{
-                scale: [1, 1.1, 1],
-                y: [0, -8, 0],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-              className="relative z-10 w-32 h-32 rounded-full bg-gradient-to-br from-primary via-accent to-primary flex items-center justify-center text-white text-7xl font-serif font-bold shadow-[0_0_40px_rgba(212,175,55,0.4)] border-2 border-accent/50"
-            >
-              ॐ
-            </motion.div>
-          </motion.div>
+          {/* Right Visual Element - Bhawna Upadhyay Banner */}
+          <div className="relative flex items-center justify-center">
+            <div className="relative w-full aspect-[4/5] sm:aspect-[3/4] rounded-3xl overflow-hidden ring-1 ring-accent/40 shadow-[0_20px_60px_rgba(212,175,55,0.3)]">
+              <SmartImage
+                src="/bhawna-15.jpg"
+                alt="Bhawna Upadhyay — Astrologer & Vastu Consultant"
+                className="w-full h-full object-cover object-center"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+              <div className="absolute bottom-5 left-5 right-5 text-white">
+                <p className="font-serif text-2xl font-bold drop-shadow">Bhawna Upadhyay</p>
+                <p className="text-sm text-white/90 drop-shadow">Astrologer &amp; Vastu Consultant • TEDx Speaker</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
