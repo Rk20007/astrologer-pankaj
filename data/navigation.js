@@ -1,3 +1,8 @@
+import { youtubeChannelUrl } from './podcasts';
+
+// Contact details live in data/site.js — re-exported so existing imports keep working.
+export { contactInfo } from './site';
+
 export const navLinks = [
   {
     id: 'home',
@@ -15,6 +20,11 @@ export const navLinks = [
     href: '/services',
   },
   {
+    id: 'appointments',
+    label: 'Appointments',
+    href: '/appointments',
+  },
+  {
     id: 'pricing',
     label: 'Pricing',
     href: '/pricing',
@@ -23,6 +33,11 @@ export const navLinks = [
     id: 'puja',
     label: 'Puja & Anushthan',
     href: '/puja',
+  },
+  {
+    id: 'podcast',
+    label: 'Podcast',
+    href: '/podcast',
   },
   {
     id: 'faq',
@@ -38,21 +53,21 @@ export const navLinks = [
 
 export const footerLinks = [
   {
-    title: 'Services',
+    title: 'Consultations',
     links: [
-      { label: 'Astrology Readings', href: '/services' },
-      { label: 'Numerology', href: '/services' },
-      { label: 'Vastu Consultation', href: '/services' },
-      { label: 'Puja Services', href: '/puja' },
+      { label: 'Book an Appointment', href: '/appointments' },
+      { label: 'Consultation Charges', href: '/pricing' },
+      { label: 'Vastu Consultation', href: '/pricing#bhawna' },
+      { label: 'Detailed Kundali PDF', href: '/appointments#kundali-pdf' },
     ],
   },
   {
-    title: 'Company',
+    title: 'Explore',
     links: [
-      { label: 'About Us', href: '/about' },
-      { label: 'Blog', href: '#' },
-      { label: 'Testimonials', href: '/#testimonials' },
-      { label: 'Contact', href: '/contact' },
+      { label: 'About Bhawna Upadhyay', href: '/about' },
+      { label: 'Puja & Anushthan', href: '/puja' },
+      { label: 'Podcast Appearances', href: '/podcast' },
+      { label: 'FAQ', href: '/faq' },
     ],
   },
   {
@@ -61,19 +76,17 @@ export const footerLinks = [
       { label: 'Privacy Policy', href: '/privacy' },
       { label: 'Terms & Conditions', href: '/terms' },
       { label: 'Cancellation Policy', href: '/cancellation' },
+      { label: 'Contact', href: '/contact' },
     ],
   },
 ];
 
-export const contactInfo = {
-  phone: '+91 98765 43210',
-  email: 'contact@astrology-consultation.com',
-  address: 'New Delhi, India',
-  hours: 'Monday to Sunday, 10:00 AM - 8:00 PM IST',
-  whatsapp: '+91 98765 43210',
-};
-
 export const socialLinks = [
+  {
+    platform: 'youtube',
+    url: youtubeChannelUrl,
+    label: 'YouTube',
+  },
   {
     platform: 'instagram',
     url: 'https://instagram.com',
@@ -83,15 +96,5 @@ export const socialLinks = [
     platform: 'facebook',
     url: 'https://facebook.com',
     label: 'Facebook',
-  },
-  {
-    platform: 'youtube',
-    url: 'https://youtube.com',
-    label: 'YouTube',
-  },
-  {
-    platform: 'twitter',
-    url: 'https://twitter.com',
-    label: 'Twitter',
   },
 ];

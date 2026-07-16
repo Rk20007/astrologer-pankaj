@@ -1,151 +1,166 @@
-export const services = [
-  {
-    id: 'bhawna-kundli',
-    consultant: 'Bhawna Ma\'am',
-    consultantId: 'bhawna',
-    name: 'Kundli Reading & Interpretation',
-    duration: '60 min',
-    waiting: 1500,
-    urgent: 2500,
-    description: 'Detailed Kundli analysis for personal growth and insights',
+import { consultants as pricingConsultants } from './pricing';
+
+/**
+ * Marketing copy per service. Prices, durations and waiting times are NOT
+ * repeated here — they are pulled from data/pricing.js so the services page
+ * and the pricing page can never disagree about what something costs.
+ */
+const copy = {
+  'bhawna-kundli-audio': {
+    description:
+      'A full reading of your birth chart over an audio call, with the remedies indicated for your situation.',
     benefits: [
-      'Birth chart interpretation',
-      'Planetary positions analysis',
-      'Dasha and transit analysis',
-      'Life events prediction',
+      'Complete birth chart interpretation',
+      'Planetary positions, dasha and transit analysis',
+      'Answers to the questions you bring',
+      'Personalized remedies included',
     ],
-    image: '/services/kundli.jpg',
   },
-  {
-    id: 'bhawna-video',
-    consultant: 'Bhawna Ma\'am',
-    consultantId: 'bhawna',
-    name: 'Video Consultation',
-    duration: '45 min',
-    waiting: 1200,
-    urgent: 2000,
-    description: 'One-on-one personalized consultation via video call',
+  'bhawna-kundli-video': {
+    description:
+      'The same full kundli reading, face to face over video — the most commonly booked consultation.',
     benefits: [
-      'Face-to-face interaction',
-      'Personalized guidance',
-      'Real-time questions',
-      'Customized solutions',
+      'Complete birth chart interpretation',
+      'Face-to-face guidance over video',
+      'Career, marriage, health and finance questions',
+      'Personalized remedies included',
     ],
-    image: '/services/video.jpg',
   },
-  {
-    id: 'bhawna-urgent-audio',
-    consultant: 'Bhawna Ma\'am',
-    consultantId: 'bhawna',
-    name: 'Urgent Audio Consultation',
-    duration: '30 min',
-    waiting: null,
-    urgent: 1500,
-    description: 'Quick audio consultation for immediate guidance',
+  'bhawna-urgent-audio': {
+    description:
+      'A priority audio slot when the matter cannot wait for the standard queue.',
     benefits: [
-      'Same-day service available',
-      'Quick guidance',
-      'Direct answers',
-      'Fast solutions',
+      'Scheduled within 2–3 days of payment',
+      'Full reading, not a shortened one',
+      'Direct answers on the pressing matter',
+      'Personalized remedies included',
     ],
-    image: '/services/audio.jpg',
   },
-  {
-    id: 'bhawna-marriage',
-    consultant: 'Bhawna Ma\'am',
-    consultantId: 'bhawna',
-    name: 'Marriage Compatibility Analysis',
-    duration: '75 min',
-    waiting: 2000,
-    urgent: 3500,
-    description: 'Complete compatibility check for potential matches',
+  'bhawna-urgent-video': {
+    description:
+      'A priority video slot with the full reading, scheduled within days rather than weeks.',
     benefits: [
-      'Couple Kundli matching',
-      'Compatibility score',
-      'Remedies for dosha',
-      'Auspicious dates',
+      'Scheduled within 2–3 days of payment',
+      'Face-to-face guidance over video',
+      'Full chart reading and remedies',
+      'Personalized remedies included',
     ],
-    image: '/services/marriage.jpg',
   },
-  {
-    id: 'pankaj-astrology',
-    consultant: 'Pankaj Sir',
-    consultantId: 'pankaj',
-    name: 'Vedic Astrology Reading',
-    duration: '60 min',
-    waiting: 1500,
-    urgent: 2500,
-    description: 'Deep dive into your birth chart with expert Vedic astrology analysis',
+  'bhawna-office': {
+    description:
+      'An in-person consultation at the office, with your chart prepared and discussed across the table.',
     benefits: [
-      'Complete birth chart analysis',
-      'Career guidance',
+      'In-person kundli consultation',
+      'Longer 30 minute session',
+      'Remedies explained and demonstrated',
+      'Personalized remedies included',
+    ],
+  },
+  'bhawna-couple': {
+    description:
+      'For two people together — kundali matching and practical guidance on the relationship itself.',
+    benefits: [
+      'Both charts read and matched',
+      'Dosha assessment and remedies',
+      'Relationship and marriage guidance',
+      'Auspicious dates where relevant',
+    ],
+  },
+  'bhawna-vastu': {
+    description:
+      'An on-site Vastu assessment of your home or workplace, with corrections you can actually carry out.',
+    benefits: [
+      'Full directional and layout assessment',
+      'Element balancing guidance',
+      'Practical, buildable corrections',
+      'Follow-up support on implementation',
+    ],
+  },
+  'pankaj-astrology': {
+    description:
+      'A focused Vedic astrology reading over an audio call, covering the questions that matter most to you.',
+    benefits: [
+      'Birth chart analysis',
+      'Career and business guidance',
       'Relationship insights',
-      'Financial recommendations',
+      'Remedy suggestions',
     ],
-    image: '/services/astrology.jpg',
   },
-  {
-    id: 'pankaj-numerology',
-    consultant: 'Pankaj Sir',
-    consultantId: 'pankaj',
-    name: 'Numerology Consultation',
-    duration: '45 min',
-    waiting: 1200,
-    urgent: 2000,
-    description: 'Unlock the power of numbers in your life with numerology',
+  'pankaj-numerology': {
+    description:
+      'Numerology guidance — life path, name and business numbers, and the dates that favour you.',
     benefits: [
-      'Life path analysis',
-      'Name correction',
-      'Business numbers',
-      'Lucky dates and gemstones',
+      'Life path number analysis',
+      'Name correction guidance',
+      'Business and mobile numbers',
+      'Favourable dates',
     ],
-    image: '/services/numerology.jpg',
   },
-  {
-    id: 'pankaj-combined',
-    consultant: 'Pankaj Sir',
-    consultantId: 'pankaj',
-    name: 'Astrology + Numerology Package',
-    duration: '90 min',
-    waiting: 2500,
-    urgent: 4000,
-    description: 'Comprehensive analysis combining Vedic astrology and numerology',
+  'pankaj-combo': {
+    description:
+      'Astrology and numerology together in one longer session, for a fuller picture and combined remedies.',
     benefits: [
-      'Complete birth chart analysis',
+      'Birth chart analysis',
       'Numerology life path',
       'Combined recommendations',
       'Gemstone and remedy suggestions',
     ],
-    image: '/services/combined.jpg',
   },
-  {
-    id: 'pankaj-vastu',
-    consultant: 'Pankaj Sir',
-    consultantId: 'pankaj',
-    name: 'Vastu Consultation',
-    duration: '120 min',
-    waiting: 3000,
-    urgent: 5000,
-    description: 'Transform your space with Vastu Shastra principles',
+  'pankaj-couple': {
+    description:
+      'Kundali match making and marriage guidance for couples and families considering a match.',
     benefits: [
-      'Space assessment',
-      'Directional guidance',
-      'Element balancing',
-      'Remedy implementation',
+      'Kundali matching for both charts',
+      'Compatibility assessment',
+      'Dosha remedies',
+      'Guidance on timing',
     ],
-    image: '/services/vastu.jpg',
   },
-];
+  'pankaj-vastu': {
+    description:
+      'On-site Vastu consultation for homes and commercial spaces, with practical corrective steps.',
+    benefits: [
+      'Space and directional assessment',
+      'Element balancing',
+      'Practical corrections',
+      'Implementation guidance',
+    ],
+  },
+};
+
+/**
+ * Flattens every consultant's plans into the shape the service cards render.
+ * Price fields mirror data/pricing.js exactly.
+ */
+export const services = pricingConsultants.flatMap((consultant) =>
+  consultant.plans.map((plan) => ({
+    id: plan.id,
+    consultant: consultant.name,
+    consultantId: consultant.id,
+    name: plan.mode ? `${plan.name} (${plan.mode})` : plan.name,
+    shortName: plan.name,
+    duration: plan.duration || 'On-site',
+    price: plan.price ?? null,
+    tiers: plan.tiers ?? null,
+    urgent: plan.urgentPrice ?? null,
+    urgentNote: plan.urgentNote ?? null,
+    waitingText: plan.waiting ?? null,
+    includes: plan.includes ?? null,
+    popular: Boolean(plan.popular),
+    description: copy[plan.id]?.description ?? '',
+    benefits: copy[plan.id]?.benefits ?? [],
+  }))
+);
 
 export const consultants = [
   {
     id: 'bhawna',
-    name: 'Bhawna Ma\'am',
-    title: 'Astrologer & Vastu Consultant',
+    name: 'Bhawna Upadhyay',
+    title: 'Vedic Astrologer & Vastu Consultant',
     experience: '15+ years',
     specialization: 'Kundli Reading, Vastu Shastra, Relationship & Career Guidance',
     image: '/bhawna-01.jpg',
-    bio: 'A TEDx speaker and trusted astrologer, Bhawna Ma\'am combines traditional Vedic astrology and Vastu Shastra with modern psychology to help people shift their energies and transform their personal and professional lives.',
+    bio: 'A TEDx speaker and trusted astrologer, Bhawna Upadhyay combines traditional Vedic astrology and Vastu Shastra with a clear, practical reading of the life in front of her — helping people shift their energies and transform their personal and professional lives.',
     featured: true,
   },
   {
@@ -154,7 +169,8 @@ export const consultants = [
     title: 'Vedic Astrologer & Numerologist',
     experience: '20+ years',
     specialization: 'Vedic Astrology, Numerology, Vastu Shastra',
-    image: '/consultants/pankaj.jpg',
-    bio: 'With over two decades of experience, Pankaj Sir has guided thousands of individuals through life\'s challenges with profound astrological insights.',
+    // TODO(launch): swap in a real photograph of Pankaj Sir when one is supplied.
+    image: '/art/consultant-pankaj.svg',
+    bio: 'With over two decades of experience, Pankaj Sir has guided thousands of individuals through life\'s challenges with profound astrological and numerological insight.',
   },
 ];

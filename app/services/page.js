@@ -7,7 +7,7 @@ import SmartImage from '@/components/SmartImage';
 
 export const metadata = {
   title: 'Professional Astrology Services | Consultation & Readings',
-  description: 'Expert astrology, numerology, Vastu, and kundli reading services from Pankaj Sir and Bhawna Ma\'am. Book your consultation today.',
+  description: 'Expert astrology, numerology, Vastu, and kundli reading services from Pankaj Sir and Bhawna Upadhyay. Book your consultation today.',
 };
 
 export default function ServicesPage() {
@@ -30,21 +30,21 @@ export default function ServicesPage() {
           </div>
         </section>
 
-        {/* Bhawna Ma'am Services (Featured) */}
+        {/* Bhawna Upadhyay Services (Featured) */}
         <section className="py-16 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-12">
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-16 h-16 rounded-full overflow-hidden ring-2 ring-primary/40 flex-shrink-0 bg-muted">
                   <SmartImage
-                    src="/consultants/bhawna.jpg"
-                    alt="Bhawna Ma'am"
+                    src="/bhawna-01.jpg"
+                    alt="Bhawna Upadhyay"
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h2 className="font-serif text-3xl font-bold text-foreground">Bhawna Ma&apos;am</h2>
+                    <h2 className="font-serif text-3xl font-bold text-foreground">Bhawna Upadhyay</h2>
                     <span className="px-2.5 py-0.5 bg-primary/10 text-primary rounded-full text-xs font-semibold uppercase tracking-wide">Featured</span>
                   </div>
                   <p className="text-muted-foreground">Astrologer & Vastu Consultant • TEDx Speaker • 15+ Years Experience</p>

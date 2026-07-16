@@ -1,19 +1,43 @@
 import { Analytics } from '@vercel/analytics/next'
+import { AppointmentModalProvider } from '@/components/AppointmentModal'
+import { site } from '@/data/site'
 import './globals.css'
 
 export const metadata = {
-  title: 'Premium Astrology Consultation Services | Pankaj Sir & Bhawna Ma\'am',
-  description: 'Expert astrology, numerology, and Vastu consultation services from trusted astrologers. Book your personalized consultation today.',
+  metadataBase: new URL(site.url),
+  title: {
+    default: `${site.name} | TEDx Speaker & Vedic Astrologer`,
+    template: `%s | ${site.name}`,
+  },
+  description:
+    'Bhawna Upadhyay — TEDx Speaker, Vedic astrologer and spiritual guide. Personalised consultations, kundli readings, Vastu, puja and anushthan, and authentic remedies.',
   generator: 'Next.js',
-  keywords: 'astrology, numerology, vastu, horoscope, kundli, consultation, premium services',
-  authors: [{ name: 'Astrology Consultants' }],
+  keywords: [
+    'Bhawna Upadhyay',
+    'vedic astrologer',
+    'TEDx speaker astrologer',
+    'kundli reading',
+    'astrology consultation',
+    'vastu consultation',
+    'puja and anushthan',
+    'kundali matching',
+    'numerology',
+  ],
+  authors: [{ name: site.name }],
   openGraph: {
     type: 'website',
-    locale: 'en_US',
-    url: 'https://astrology-consultation.example.com',
-    title: 'Premium Astrology Consultation Services',
-    description: 'Expert astrology, numerology, and Vastu consultation services',
-    siteName: 'Astrology Consultation',
+    locale: 'en_IN',
+    url: site.url,
+    title: `${site.name} | TEDx Speaker & Vedic Astrologer`,
+    description:
+      'Personalised Vedic astrology consultations, kundli readings, Vastu guidance and authentic remedies from Bhawna Upadhyay.',
+    siteName: site.name,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: `${site.name} | TEDx Speaker & Vedic Astrologer`,
+    description:
+      'Personalised Vedic astrology consultations, kundli readings, Vastu guidance and authentic remedies.',
   },
   icons: {
     icon: [
@@ -41,11 +65,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="bg-background">
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body className="antialiased">
-        {children}
+        <AppointmentModalProvider>{children}</AppointmentModalProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

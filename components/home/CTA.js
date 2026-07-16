@@ -3,8 +3,11 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Button from '@/components/Button';
+import { useAppointmentModal } from '@/components/AppointmentModal';
 
 export default function HomeCTA() {
+  const { open: openAppointment } = useAppointmentModal();
+
   return (
     <section className="py-20 bg-gradient-to-r from-dark to-secondary relative overflow-hidden">
       {/* Animated Background */}
@@ -33,7 +36,7 @@ export default function HomeCTA() {
           </h2>
 
           <p className="text-lg text-gold-light/90 max-w-2xl mx-auto leading-relaxed">
-            Book a consultation with our expert astrologers today and unlock the cosmic secrets hidden in your birth chart. Let ancient wisdom guide your future.
+            Book a consultation with Bhawna Upadhyay and receive a reading of your own chart, with personalised remedies you can actually put into practice.
           </p>
 
           <motion.div
@@ -43,15 +46,14 @@ export default function HomeCTA() {
             transition={{ delay: 0.3 }}
             className="flex flex-col sm:flex-row gap-4 justify-center pt-4"
           >
-            <Link href="/contact">
-              <Button
-                variant="primary"
-                size="lg"
-                className="bg-white text-dark hover:bg-gold-light"
-              >
-                Book Your Consultation
-              </Button>
-            </Link>
+            <Button
+              variant="primary"
+              size="lg"
+              className="bg-white text-dark hover:bg-gold-light"
+              onClick={openAppointment}
+            >
+              Book Your Consultation
+            </Button>
             <Link href="/pricing">
               <Button
                 variant="outline"

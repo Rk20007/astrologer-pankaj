@@ -1,176 +1,132 @@
-'use client';
-
+import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import FloatingButtons from '@/components/FloatingButtons';
 import Button from '@/components/Button';
-import { pujasData } from '@/data/puja';
-import { IndianRupee, Clock, CheckCircle } from 'lucide-react';
-import Link from 'next/link';
-import { useState } from 'react';
+import { pujaGroups } from '@/data/puja';
+import { formatINR } from '@/data/site';
+import { MapPin } from 'lucide-react';
+
+export const metadata = {
+  title: 'Puja & Anushthan | Bhawna Upadhyay',
+  description:
+    'Tripindi Shraddh, Narayan Nagbali, Kaal-Sarp Shanti and Navgrah Shanti Havan at Trimbakeshwar Jyotirlinga, Mahamrityunjai Anushthan, and Maa Baglamukhi Pooja.',
+};
+
+function bookingHref(item) {
+  return `/puja/book/${item.id}`;
+}
 
 export default function PujaPage() {
-  const [selectedCategory, setSelectedCategory] = useState('all');
-
-  const categories = ['all', ...new Set(pujasData.map((p) => p.category))];
-  const filteredPujas =
-    selectedCategory === 'all'
-      ? pujasData
-      : pujasData.filter((p) => p.category === selectedCategory);
-
   return (
     <>
       <Navbar />
       <main className="min-h-screen pt-16">
-        {/* Header */}
-        <section className="py-12 bg-gradient-to-b from-secondary/5 to-transparent">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 className="font-serif text-5xl sm:text-6xl font-bold text-foreground mb-4">
-              Puja & Anushthan
+        <section className="bg-gradient-to-b from-secondary/10 via-transparent to-transparent py-14">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <span className="mb-4 inline-block rounded-full bg-secondary/10 px-4 py-2 text-sm font-semibold uppercase tracking-wide text-secondary">
+              Puja &amp; Anushthan
+            </span>
+            <h1 className="mb-4 font-serif text-5xl font-bold text-foreground sm:text-6xl">
+              Sacred Remedial Rituals
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl">
-              Sacred remedial rituals performed at holy temples to align your life with cosmic energies and divine blessings.
+            <p className="max-w-3xl text-xl text-muted-foreground">
+              Performed at Trimbakeshwar Jyotirlinga and other sacred sites by temple-appointed
+              priests, with the sankalp taken in your name. You may attend in person or have the
+              ritual performed on your behalf.
             </p>
           </div>
         </section>
 
-        {/* Category Filter */}
-        <section className="py-8 bg-background border-b border-border">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex gap-2 flex-wrap">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-6 py-2 rounded-full font-medium transition-all ${
-                    selectedCategory === cat
-                      ? 'bg-secondary text-white shadow-lg'
-                      : 'bg-muted text-foreground hover:bg-muted-foreground'
-                  }`}
-                >
-                  {cat.charAt(0).toUpperCase() + cat.slice(1)}
-                </button>
-              ))}
-            </div>
+        {/* Jump links */}
+        <section className="sticky top-16 z-20 border-y border-border bg-background/95 py-4 backdrop-blur">
+          <div className="mx-auto flex max-w-7xl flex-wrap gap-2 px-4 sm:px-6 lg:px-8">
+            {pujaGroups.map((group) => (
+              <a
+                key={group.id}
+                href={`#${group.id}`}
+                className="rounded-full bg-muted px-5 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary hover:text-white"
+              >
+                {group.name}
+              </a>
+            ))}
           </div>
         </section>
 
-        {/* Puja Grid */}
-        <section className="py-16 bg-background">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {filteredPujas.map((puja) => (
-                <div
-                  key={puja.id}
-                  className="bg-card border border-border rounded-xl overflow-hidden hover:shadow-lg hover:border-secondary/50 transition-all group"
-                >
-                  {/* Color Band */}
-                  <div className="h-2 bg-gradient-to-r from-secondary via-dark-red to-secondary" />
+        {pujaGroups.map((group, index) => (
+          <section
+            key={group.id}
+            id={group.id}
+            className={`scroll-mt-32 py-16 ${index % 2 === 0 ? 'bg-background' : 'bg-muted/30'}`}
+          >
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="mb-10 max-w-3xl">
+                <h2 className="font-serif text-4xl font-bold text-foreground">{group.name}</h2>
+                {group.subtitle && (
+                  <p className="mt-1.5 text-lg font-semibold text-secondary">{group.subtitle}</p>
+                )}
+                {group.location && (
+                  <p className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground">
+                    <MapPin className="h-4 w-4 text-secondary" />
+                    {group.location}
+                  </p>
+                )}
+                {group.description && (
+                  <p className="mt-4 leading-relaxed text-muted-foreground">{group.description}</p>
+                )}
+              </div>
 
-                  <div className="p-8">
-                    {/* Category Badge */}
-                    <span className="inline-block px-3 py-1 bg-secondary/10 text-secondary rounded-full text-xs font-bold uppercase tracking-wide mb-4">
-                      {puja.category}
-                    </span>
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {group.items.map((item) => (
+                  <article
+                    key={item.id}
+                    className="flex flex-col rounded-3xl border border-border bg-card p-7 shadow-sm transition-shadow hover:shadow-lg"
+                  >
+                    <h3 className="font-serif text-2xl font-bold text-foreground">{item.name}</h3>
+                    {item.detail && (
+                      <p className="mt-1 text-sm font-semibold text-secondary">{item.detail}</p>
+                    )}
 
-                    {/* Title */}
-                    <h3 className="font-serif text-2xl font-bold text-foreground mb-2 group-hover:text-secondary transition-colors">
-                      {puja.name}
-                    </h3>
+                    <p className="mt-5 text-3xl font-bold text-foreground">
+                      {formatINR(item.price)}
+                    </p>
 
-                    {/* Temple */}
-                    <p className="text-muted-foreground mb-6 text-sm">{puja.temple}</p>
+                    <p className="mt-4 flex-1 text-sm leading-relaxed text-muted-foreground">
+                      {item.description}
+                    </p>
 
-                    {/* Details */}
-                    <div className="space-y-4 mb-6">
-                      <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4 text-secondary flex-shrink-0" />
-                        <span className="text-sm text-foreground">{puja.duration}</span>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <IndianRupee className="w-4 h-4 text-secondary flex-shrink-0" />
-                        <span className="text-lg font-bold text-foreground">₹{puja.price}</span>
-                      </div>
-                    </div>
-
-                    {/* Benefits */}
-                    <div className="mb-6">
-                      <p className="text-xs font-bold text-secondary uppercase tracking-wide mb-3">
-                        Benefits
-                      </p>
-                      <ul className="space-y-2">
-                        {puja.benefits.map((benefit, idx) => (
-                          <li key={idx} className="flex items-start gap-2 text-sm text-foreground">
-                            <CheckCircle className="w-3.5 h-3.5 text-secondary flex-shrink-0 mt-0.5" />
-                            <span>{benefit}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* Includes */}
-                    <div className="mb-6">
-                      <p className="text-xs font-bold text-secondary uppercase tracking-wide mb-3">
-                        Includes
-                      </p>
-                      <ul className="space-y-1 text-sm text-muted-foreground">
-                        {puja.includes.map((item, idx) => (
-                          <li key={idx}>• {item}</li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* CTA */}
-                    <Link href="/contact" className="block w-full">
-                      <Button variant="primary" size="md" className="w-full">
-                        Book Puja Service
+                    <Link href={bookingHref(item)} className="mt-6">
+                      <Button variant="secondary" size="md" className="w-full">
+                        Book This Puja
                       </Button>
                     </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Info Section */}
-        <section className="py-16 bg-muted/30">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-serif text-3xl font-bold text-foreground text-center mb-8">
-              About Puja Services
-            </h2>
-
-            <div className="space-y-6 text-foreground leading-relaxed">
-              <p>
-                Puja (worship) is a sacred ritual performed to invoke divine blessings and cosmic energies. Our certified priests perform these rituals at the most auspicious temples across India, ensuring authentic and powerful ceremonies.
-              </p>
-
-              <p>
-                Each puja is customized based on your astrological chart and personal needs. Whether you seek planetary harmony, protection, prosperity, or spiritual growth, we have the right ceremony for you.
-              </p>
-
-              <div className="bg-card border border-border rounded-lg p-6 mt-8">
-                <h3 className="font-semibold text-lg text-foreground mb-4">How It Works</h3>
-                <ol className="space-y-3 text-sm">
-                  <li className="flex gap-3">
-                    <span className="font-bold text-primary">1.</span>
-                    <span>Consultation to understand your needs</span>
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="font-bold text-primary">2.</span>
-                    <span>Astrological analysis for auspicious timing</span>
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="font-bold text-primary">3.</span>
-                    <span>Expert priest performs the ritual ceremony</span>
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="font-bold text-primary">4.</span>
-                    <span>Video documentation and Prasad delivery</span>
-                  </li>
-                </ol>
+                  </article>
+                ))}
               </div>
+            </div>
+          </section>
+        ))}
+
+        <section className="border-t border-border bg-background py-16">
+          <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
+            <h2 className="mb-4 font-serif text-3xl font-bold text-foreground">
+              Not sure which puja is indicated for you?
+            </h2>
+            <p className="mb-8 text-muted-foreground">
+              The right ritual depends on what your chart actually shows. Book a consultation first
+              — the puja will be recommended only if it is genuinely called for.
+            </p>
+            <div className="flex flex-col justify-center gap-4 sm:flex-row">
+              <Link href="/appointments">
+                <Button variant="primary" size="lg">
+                  Book a Consultation
+                </Button>
+              </Link>
+              <Link href="/contact">
+                <Button variant="outline" size="lg">
+                  Ask a Question
+                </Button>
+              </Link>
             </div>
           </div>
         </section>

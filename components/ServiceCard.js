@@ -1,11 +1,14 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Link from 'next/link';
-import { Clock, IndianRupee, Check } from 'lucide-react';
+import { Clock, Check } from 'lucide-react';
 import Button from './Button';
+import ServicePrice from '@/components/ServicePrice';
+import { useAppointmentModal } from '@/components/AppointmentModal';
 
 export default function ServiceCard({ service, showBooking = true }) {
+  const { open: openAppointment } = useAppointmentModal();
+
   return (
     <motion.div
       whileHover={{ y: -8 }}
@@ -46,26 +49,8 @@ export default function ServiceCard({ service, showBooking = true }) {
           </div>
 
           {/* Premium Pricing Display */}
-          <div className="space-y-2 border-t border-accent/20 pt-3">
-            {service.waiting && (
-              <div className="flex items-center justify-between bg-background rounded-lg p-2.5 border border-accent/40">
-                <span className="text-xs font-semibold text-foreground uppercase tracking-wide">Standard Rate</span>
-                <div className="flex items-center gap-1">
-                  <IndianRupee className="w-4 h-4 text-primary" />
-                  <span className="font-bold text-primary text-lg">{service.waiting}</span>
-                </div>
-              </div>
-            )}
-
-            {service.urgent && (
-              <div className="flex items-center justify-between bg-secondary/5 rounded-lg p-2.5 border border-secondary/20">
-                <span className="text-xs font-semibold text-secondary uppercase tracking-wide">Urgent Rate</span>
-                <div className="flex items-center gap-1">
-                  <IndianRupee className="w-4 h-4 text-secondary" />
-                  <span className="font-bold text-secondary text-lg">{service.urgent}</span>
-                </div>
-              </div>
-            )}
+          <div className="border-t border-accent/20 pt-3">
+            <ServicePrice service={service} />
           </div>
         </div>
 
@@ -100,11 +85,14 @@ export default function ServiceCard({ service, showBooking = true }) {
         {/* Premium CTA Button */}
         {showBooking && (
           <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-            <Link href="/contact" className="w-full">
-              <Button variant="primary" size="md" className="w-full text-base font-bold">
-                Book Consultation
-              </Button>
-            </Link>
+            <Button
+              variant="primary"
+              size="md"
+              className="w-full text-base font-bold"
+              onClick={openAppointment}
+            >
+              Book Consultation
+            </Button>
           </motion.div>
         )}
       </div>

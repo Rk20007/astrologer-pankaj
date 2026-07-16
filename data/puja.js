@@ -1,213 +1,114 @@
-export const pujasData = [
+/**
+ * Puja & Anushthan offerings, grouped by tradition.
+ * Source of truth for both the /puja page and the "Online Pooja" appointment card.
+ */
+
+export const pujaGroups = [
   {
-    id: 'mangal-shanti',
-    category: 'Planetary',
-    temple: 'Hanuman Temple, Ayodhya',
-    name: 'Mangal Shanti Puja',
-    duration: '2 hours',
-    price: 3500,
-    benefits: [
-      'Reduce Mars affliction',
-      'Enhance courage',
-      'Improve confidence',
-      'Better relationships',
+    id: 'trimbakeshwar',
+    name: 'Trimbakeshwar Jyotirlinga',
+    location: 'Nashik, Maharashtra',
+    description:
+      'One of the twelve Jyotirlingas, and the only place where Tripindi Shraddh and Narayan Nagbali are traditionally performed. Rituals are conducted by temple-appointed priests.',
+    items: [
+      {
+        id: 'tripindi-shraddh',
+        name: 'Tripindi Shraddh',
+        price: 11000,
+        description:
+          'Performed to bring peace to ancestors whose last rites remained incomplete, and to relieve Pitru Dosha across three generations.',
+      },
+      {
+        id: 'narayan-nagbali',
+        name: 'Narayan Nagbali',
+        price: 11000,
+        description:
+          'A three-day ritual for Pitru Dosha and Naag Dosha — traditionally performed to release ancestral debts and unfulfilled desires of departed souls.',
+      },
+      {
+        id: 'kaal-sarp-shanti',
+        name: 'Kaal-Sarp Shanti Puja',
+        price: 21000,
+        description:
+          'For those with Kaal Sarp Yoga in the birth chart, to ease its effect on career, health and family life.',
+      },
+      {
+        id: 'grah-mantra-jaap',
+        name: 'Grah Mantra Jaap',
+        detail: '18,000 mantra',
+        price: 11000,
+        description:
+          'Dedicated mantra chanting for the planet afflicting your chart, completed to the prescribed count of 18,000.',
+      },
+      {
+        id: 'navgrah-shanti-havan',
+        name: 'Navgrah Shanti Havan',
+        price: 21000,
+        description:
+          'A havan invoking all nine planets together, to settle overall planetary disturbance and restore balance.',
+      },
     ],
-    includes: [
-      'Priest service',
-      'All materials',
-      'Prasad',
-      'Video recording',
-    ],
-    image: '/puja/mangal.jpg',
   },
   {
-    id: 'shani-shanti',
-    category: 'Planetary',
-    temple: 'Shani Temple, Varanasi',
-    name: 'Shani Shanti Puja',
-    duration: '2.5 hours',
-    price: 4000,
-    benefits: [
-      'Saturn blessings',
-      'Career growth',
-      'Long-term stability',
-      'Life structure',
+    id: 'mahamrityunjai',
+    name: 'Mahamrityunjai Anushthan',
+    subtitle: '7 Sidh Bali Bhramanu Dwara',
+    description:
+      'The Mahamrityunjaya mantra anushthan, performed by seven accomplished brahmins, is traditionally undertaken for health, longevity and protection from grave difficulty.',
+    items: [
+      {
+        id: 'mahamrityunjai-21000',
+        name: '21,000 Chants',
+        price: 210000,
+        description: 'Anushthan completed to 21,000 chants by 7 Sidh Bali Bhramanu.',
+      },
+      {
+        id: 'mahamrityunjai-51000',
+        name: '51,000 Chants',
+        price: 51000,
+        description: 'Anushthan completed to 51,000 chants by 7 Sidh Bali Bhramanu.',
+      },
     ],
-    includes: [
-      'Priest service',
-      'Premium materials',
-      'Prasad delivery',
-      'Detailed documentation',
-    ],
-    image: '/puja/shani.jpg',
   },
   {
-    id: 'lakshmi-puja',
-    category: 'Prosperity',
-    temple: 'Lakshmi Temple, Mathura',
-    name: 'Lakshmi Puja for Prosperity',
-    duration: '1.5 hours',
-    price: 2500,
-    benefits: [
-      'Wealth increase',
-      'Financial stability',
-      'Business growth',
-      'Abundance flow',
+    id: 'baglamukhi',
+    name: 'Maa Baglamukhi Pooja',
+    description:
+      'Maa Baglamukhi is invoked for victory over opposition, protection from ill intent, and stability at home and in business. Meetha and Kadwa havan serve different intentions.',
+    items: [
+      {
+        id: 'baglamukhi-meetha',
+        name: 'Ghar ki Shanti',
+        detail: 'Meetha Havan',
+        price: 11000,
+        description: 'For peace at home, harmony in the family and a settled household atmosphere.',
+      },
+      {
+        id: 'baglamukhi-kadwa',
+        name: 'Karobar Faeda',
+        detail: 'Kadwa Havan',
+        price: 15000,
+        description: 'For business growth, removing obstruction in trade and recovering stuck work.',
+      },
+      {
+        id: 'baglamukhi-both',
+        name: 'Kadwa + Meetha Havan',
+        price: 18000,
+        description: 'Both havans performed together, covering home peace and business benefit.',
+      },
+      {
+        id: 'baglamukhi-tantra',
+        name: 'Tantra Havan',
+        detail: 'Court Case, Shatru Vinash, Buri Nazar, Tantra Mantra Nivaran',
+        price: 41000,
+        description:
+          'The most intensive of the Baglamukhi rituals — undertaken for court matters, persistent opposition, and removal of buri nazar and tantric affliction.',
+      },
     ],
-    includes: [
-      'Priest service',
-      'Flowers and materials',
-      'Blessed Prasad',
-      'Certificate of Puja',
-    ],
-    image: '/puja/lakshmi.jpg',
-  },
-  {
-    id: 'saraswati-puja',
-    category: 'Education',
-    temple: 'Saraswati Temple, Varanasi',
-    name: 'Saraswati Puja for Knowledge',
-    duration: '1 hour',
-    price: 1500,
-    benefits: [
-      'Educational success',
-      'Knowledge acquisition',
-      'Creative improvement',
-      'Clarity of mind',
-    ],
-    includes: [
-      'Temple arrangement',
-      'Essential materials',
-      'Prasad',
-      'Video documentation',
-    ],
-    image: '/puja/saraswati.jpg',
-  },
-  {
-    id: 'navgraha-puja',
-    category: 'Planetary',
-    temple: 'Navgraha Temple, Delhi',
-    name: 'Navgraha Puja (9 Planets)',
-    duration: '3 hours',
-    price: 6000,
-    benefits: [
-      'Planetary harmony',
-      'Overall well-being',
-      'Life balance',
-      'Positive influences',
-    ],
-    includes: [
-      'Full ritual service',
-      'Premium materials',
-      'Live streaming',
-      'Comprehensive documentation',
-    ],
-    image: '/puja/navgraha.jpg',
-  },
-  {
-    id: 'durga-puja',
-    category: 'Protection',
-    temple: 'Durga Temple, Ayodhya',
-    name: 'Durga Puja for Protection',
-    duration: '2 hours',
-    price: 3000,
-    benefits: [
-      'Divine protection',
-      'Overcome obstacles',
-      'Strength and courage',
-      'Negative removal',
-    ],
-    includes: [
-      'Priest service',
-      'Ritual materials',
-      'Blessed Prasad',
-      'Protection blessing',
-    ],
-    image: '/puja/durga.jpg',
-  },
-  {
-    id: 'kali-puja',
-    category: 'Transformation',
-    temple: 'Kali Temple, Kolkata',
-    name: 'Kali Puja for Transformation',
-    duration: '2.5 hours',
-    price: 4500,
-    benefits: [
-      'Inner transformation',
-      'Break negative cycles',
-      'Spiritual growth',
-      'Power activation',
-    ],
-    includes: [
-      'Expert priest',
-      'Premium offerings',
-      'Prasad blessing',
-      'Spiritual guidance',
-    ],
-    image: '/puja/kali.jpg',
-  },
-  {
-    id: 'hanuman-chalisa',
-    category: 'Devotion',
-    temple: 'Hanuman Temple, Delhi',
-    name: 'Hanuman Chalisa Recitation',
-    duration: '1.5 hours',
-    price: 1500,
-    benefits: [
-      'Strength building',
-      'Obstacle removal',
-      'Devotion growth',
-      'Positive energy',
-    ],
-    includes: [
-      'Full recitation',
-      'Priest blessing',
-      'Prasad',
-      'Audio recording',
-    ],
-    image: '/puja/hanuman.jpg',
-  },
-  {
-    id: 'ganesha-puja',
-    category: 'Auspicious',
-    temple: 'Ganesha Temple, Mumbai',
-    name: 'Ganesha Puja for New Beginnings',
-    duration: '1 hour',
-    price: 1500,
-    benefits: [
-      'New ventures blessed',
-      'Success assured',
-      'Obstacle removal',
-      'Good omens',
-    ],
-    includes: [
-      'Complete ritual',
-      'Materials and flowers',
-      'Blessed Prasad',
-      'Success blessing',
-    ],
-    image: '/puja/ganesha.jpg',
-  },
-  {
-    id: 'brahma-muhurta',
-    category: 'Special',
-    temple: 'Varanasi Temple Complex',
-    name: 'Brahma Muhurta Ritual',
-    duration: '3 hours',
-    price: 7500,
-    benefits: [
-      'Spiritual awakening',
-      'Higher consciousness',
-      'Soul connection',
-      'Divine alignment',
-    ],
-    includes: [
-      'Pre-dawn ceremony',
-      'Master priest',
-      'All materials',
-      'Personal blessing',
-      'Lifetime recording',
-    ],
-    image: '/puja/brahma.jpg',
   },
 ];
+
+/** Flat list of every puja, handy for lookups and the appointment card. */
+export const allPujas = pujaGroups.flatMap((group) =>
+  group.items.map((item) => ({ ...item, groupId: group.id, groupName: group.name }))
+);

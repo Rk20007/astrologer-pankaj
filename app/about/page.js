@@ -1,14 +1,17 @@
+import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import FloatingButtons from '@/components/FloatingButtons';
 import SmartImage from '@/components/SmartImage';
+import AboutBhawna from '@/components/AboutBhawna';
+import Button from '@/components/Button';
 
 export const metadata = {
-  title: 'About Bhawna Ma\'am | Astrologer & Vastu Consultant',
-  description: 'Meet Bhawna Ma\'am — TEDx speaker, astrologer and Vastu consultant with 15+ years of experience guiding people to shift their energies.',
+  title: 'About Bhawna Upadhyay',
+  description:
+    'Bhawna Upadhyay — TEDx Speaker, Vedic astrologer and spiritual guide, known worldwide for insightful consultations and highly effective astrological remedies.',
 };
 
-// Photos of Bhawna Ma'am for the gallery.
 const bhawnaGallery = [
   { src: '/bhawna-15.jpg', caption: 'TEDx: “Shift Your Energies”' },
   { src: '/bhawna-13.jpg', caption: 'On the TEDx stage' },
@@ -24,76 +27,118 @@ const bhawnaGallery = [
   { src: '/bhawna-01.jpg', caption: 'With clients' },
 ];
 
+const values = [
+  {
+    title: 'Integrity',
+    body: 'You are told what the chart shows, not what you want to hear. A remedy is recommended only when it is genuinely indicated.',
+  },
+  {
+    title: 'Compassion',
+    body: 'People arrive at astrology in difficult moments. Every consultation begins by listening, without judgement.',
+  },
+  {
+    title: 'Confidentiality',
+    body: 'Everything shared in a consultation stays in the consultation. Your details are never discussed or passed on.',
+  },
+  {
+    title: 'Practicality',
+    body: 'Remedies you can actually keep up with, fitted into the life you already lead — not rituals that demand you rearrange it.',
+  },
+];
+
 export default function AboutPage() {
   return (
     <>
       <Navbar />
       <main className="min-h-screen pt-16">
         {/* Header */}
-        <section className="py-12 bg-gradient-to-b from-primary/5 to-transparent">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 className="font-serif text-5xl sm:text-6xl font-bold text-foreground mb-4">
-              About Us
+        <section className="bg-gradient-to-b from-primary/10 via-transparent to-transparent py-14">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <span className="mb-4 inline-block rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold uppercase tracking-wide text-primary">
+              {/* About */}
+            </span>
+            <h1 className="mb-4 font-serif text-5xl font-bold text-foreground sm:text-6xl">
+              Bhawna Upadhyay
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl">
-              Dedicated to providing authentic and accurate astrology guidance with over 20 years of combined experience.
+            <p className="max-w-3xl text-xl text-muted-foreground">
+              TEDx Speaker, Vedic astrologer and spiritual guide — recognised globally for
+              insightful consultations and highly effective astrological remedies.
             </p>
           </div>
         </section>
 
-        {/* Featured: Bhawna Ma'am */}
-        <section className="py-16 bg-background">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-              <div className="relative rounded-2xl overflow-hidden ring-1 ring-border shadow-lg aspect-[4/5] bg-muted">
+        {/* Portrait intro */}
+        <section className="bg-background py-16">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-2">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-muted shadow-lg ring-1 ring-accent/40">
                 <SmartImage
                   src="/bhawna-05.jpg"
-                  alt="Bhawna Ma'am — Astrologer & Vastu Consultant"
-                  className="w-full h-full object-cover object-top"
+                  alt="Bhawna Upadhyay — Vedic astrologer and Vastu consultant"
+                  className="h-full w-full object-cover object-top"
                 />
-                <span className="absolute top-4 left-4 px-3 py-1 bg-primary text-white rounded-full text-xs font-semibold uppercase tracking-wide shadow">
+                <span className="absolute left-4 top-4 rounded-full bg-primary px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white shadow">
                   TEDx Speaker
                 </span>
               </div>
+
               <div>
-                <span className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-4 uppercase tracking-wide">
+                <span className="mb-4 inline-block rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold uppercase tracking-wide text-primary">
                   Meet Your Guide
                 </span>
-                <h2 className="font-serif text-4xl font-bold text-foreground mb-4">Bhawna Ma&apos;am</h2>
-                <p className="text-primary font-semibold mb-6">Astrologer &amp; Vastu Consultant • 15+ Years Experience</p>
-                <p className="text-lg text-muted-foreground leading-relaxed mb-4">
-                  A TEDx speaker and trusted astrologer, Bhawna Ma&apos;am combines traditional Vedic
-                  astrology and Vastu Shastra with modern psychology to help people shift their energies
-                  and transform their personal and professional lives.
+                <h2 className="mb-4 font-serif text-4xl font-bold text-foreground">
+                  Bhawna Upadhyay
+                </h2>
+                <p className="mb-6 font-semibold text-primary">
+                  Vedic Astrologer &amp; Vastu Consultant • TEDx Speaker
                 </p>
-                <p className="text-lg text-muted-foreground leading-relaxed">
-                  From temple ceremonies across India to the TEDx stage, her mission stays the same —
-                  practical, compassionate guidance rooted in ancient wisdom.
+                <p className="mb-4 text-lg leading-relaxed text-muted-foreground">
+                  Bhawna Upadhyay combines traditional Vedic astrology and Vastu Shastra with a
+                  clear, practical reading of the life in front of her — helping people shift their
+                  energies and move forward in their personal and professional lives.
                 </p>
+                <p className="mb-8 text-lg leading-relaxed text-muted-foreground">
+                  From temple ceremonies across India to the TEDx stage, the mission stays the same:
+                  compassionate guidance rooted in ancient wisdom, made usable today.
+                </p>
+                <Link href="/appointments">
+                  <Button variant="primary" size="lg">
+                    Book an Appointment
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Bhawna Gallery */}
-        <section className="py-16 bg-muted/30">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-serif text-4xl font-bold text-foreground text-center mb-4">Gallery</h2>
-            <p className="text-center text-muted-foreground max-w-2xl mx-auto mb-12">
-              Moments from Bhawna Ma&apos;am&apos;s journey — talks, temple visits, and consultations.
+        {/* Full write-up */}
+        <section className="bg-muted/30 py-16">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+            <AboutBhawna />
+          </div>
+        </section>
+
+        {/* Gallery */}
+        <section className="bg-background py-16">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <h2 className="mb-4 text-center font-serif text-4xl font-bold text-foreground">
+              Gallery
+            </h2>
+            <p className="mx-auto mb-12 max-w-2xl text-center text-muted-foreground">
+              Moments from Bhawna Upadhyay&apos;s journey — talks, temple visits, and consultations.
             </p>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {bhawnaGallery.map((photo, i) => (
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+              {bhawnaGallery.map((photo) => (
                 <figure
-                  key={i}
-                  className="group relative rounded-xl overflow-hidden aspect-[3/4] bg-muted ring-1 ring-border"
+                  key={photo.src}
+                  className="group relative aspect-[3/4] overflow-hidden rounded-xl bg-muted ring-1 ring-border"
                 >
                   <SmartImage
                     src={photo.src}
                     alt={photo.caption}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  <figcaption className="absolute inset-x-0 bottom-0 p-3 text-xs font-medium text-white bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                  <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3 text-xs font-medium text-white opacity-0 transition-opacity group-hover:opacity-100">
                     {photo.caption}
                   </figcaption>
                 </figure>
@@ -102,115 +147,45 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Mission */}
-        <section className="py-16 bg-background">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-serif text-3xl font-bold text-foreground mb-6">Our Mission</h2>
-            <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-              Our mission is to provide accurate, insightful, and transformative astrological guidance that helps individuals understand their life purpose, overcome challenges, and achieve their goals through the ancient wisdom of Vedic astrology.
-            </p>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              We believe that astrology is not about predicting the future, but about understanding yourself better and making informed decisions that align with your cosmic blueprint.
-            </p>
-          </div>
-        </section>
-
-        {/* Why Choose Us */}
-        <section className="py-16 bg-muted/30">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-serif text-3xl font-bold text-foreground mb-12">Why Choose Us?</h2>
-
-            <div className="space-y-6">
-              <div className="bg-card border border-border rounded-xl p-6">
-                <h3 className="font-serif text-xl font-bold text-foreground mb-3">Expert Consultants</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Our consultants have dedicated their lives to mastering Vedic astrology, numerology, and Vastu Shastra with years of rigorous study and practice.
-                </p>
-              </div>
-
-              <div className="bg-card border border-border rounded-xl p-6">
-                <h3 className="font-serif text-xl font-bold text-foreground mb-3">Personalized Approach</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Every consultation is unique and tailored to your specific situation, birth chart, and life goals. We don't believe in one-size-fits-all readings.
-                </p>
-              </div>
-
-              <div className="bg-card border border-border rounded-xl p-6">
-                <h3 className="font-serif text-xl font-bold text-foreground mb-3">Confidentiality</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Your privacy is paramount to us. All information shared during consultations is kept strictly confidential and protected.
-                </p>
-              </div>
-
-              <div className="bg-card border border-border rounded-xl p-6">
-                <h3 className="font-serif text-xl font-bold text-foreground mb-3">Proven Track Record</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  With thousands of satisfied clients from around the world, we have consistently delivered accurate insights and meaningful guidance.
-                </p>
-              </div>
-
-              <div className="bg-card border border-border rounded-xl p-6">
-                <h3 className="font-serif text-xl font-bold text-foreground mb-3">Affordable Services</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  We offer flexible pricing options to make our services accessible to everyone. Choose between waiting period rates and urgent consultations.
-                </p>
-              </div>
-
-              <div className="bg-card border border-border rounded-xl p-6">
-                <h3 className="font-serif text-xl font-bold text-foreground mb-3">Practical Remedies</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Beyond predictions, we provide practical remedies and guidance that you can implement in your daily life for positive results.
-                </p>
-              </div>
+        {/* Values */}
+        <section className="bg-muted/30 py-16">
+          <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+            <h2 className="mb-12 font-serif text-3xl font-bold text-foreground">How I Work</h2>
+            <div className="space-y-4">
+              {values.map((value) => (
+                <div key={value.title} className="flex gap-4">
+                  <div className="w-1 shrink-0 rounded-full bg-gradient-to-b from-primary to-gold" />
+                  <div>
+                    <h3 className="mb-2 font-semibold text-foreground">{value.title}</h3>
+                    <p className="leading-relaxed text-muted-foreground">{value.body}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* Our Values */}
-        <section className="py-16 bg-background">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-serif text-3xl font-bold text-foreground mb-12">Our Values</h2>
-
-            <div className="space-y-4">
-              <div className="flex gap-4">
-                <div className="w-1 bg-gradient-to-b from-primary to-gold flex-shrink-0 rounded-full" />
-                <div>
-                  <h3 className="font-semibold text-foreground mb-2">Integrity</h3>
-                  <p className="text-muted-foreground">
-                    We are honest, transparent, and ethical in all our consultations and dealings.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <div className="w-1 bg-gradient-to-b from-primary to-gold flex-shrink-0 rounded-full" />
-                <div>
-                  <h3 className="font-semibold text-foreground mb-2">Compassion</h3>
-                  <p className="text-muted-foreground">
-                    We approach every client with empathy and understanding, recognizing the challenges they face.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <div className="w-1 bg-gradient-to-b from-primary to-gold flex-shrink-0 rounded-full" />
-                <div>
-                  <h3 className="font-semibold text-foreground mb-2">Excellence</h3>
-                  <p className="text-muted-foreground">
-                    We continuously improve our knowledge and skills to provide the best guidance possible.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <div className="w-1 bg-gradient-to-b from-primary to-gold flex-shrink-0 rounded-full" />
-                <div>
-                  <h3 className="font-semibold text-foreground mb-2">Confidentiality</h3>
-                  <p className="text-muted-foreground">
-                    Your trust is sacred. We protect your information with the highest standards.
-                  </p>
-                </div>
-              </div>
+        {/* CTA */}
+        <section className="bg-background py-16">
+          <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
+            <h2 className="mb-4 font-serif text-3xl font-bold text-foreground">
+              Guidance for your own chart
+            </h2>
+            <p className="mb-8 text-muted-foreground">
+              Every consultation is personalised, confidential, and focused on clarity and practical
+              solutions.
+            </p>
+            <div className="flex flex-col justify-center gap-4 sm:flex-row">
+              <Link href="/appointments">
+                <Button variant="primary" size="lg">
+                  Book an Appointment
+                </Button>
+              </Link>
+              <Link href="/podcast">
+                <Button variant="outline" size="lg">
+                  Watch the Podcasts
+                </Button>
+              </Link>
             </div>
           </div>
         </section>

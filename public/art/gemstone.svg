@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Faceted gemstone">
+  <defs>
+    <linearGradient id="gm-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3A2412"/>
+      <stop offset="0.6" stop-color="#5C2A2A"/>
+      <stop offset="1" stop-color="#7A1E1E"/>
+    </linearGradient>
+    <radialGradient id="gm-glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#FFCC33" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#FFCC33" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="800" height="600" fill="url(#gm-bg)"/>
+
+  <!-- orbit rings -->
+  <g fill="none" stroke="#D4AF37" stroke-opacity="0.16">
+    <circle cx="400" cy="300" r="170"/>
+    <circle cx="400" cy="300" r="230"/>
+    <ellipse cx="400" cy="300" rx="280" ry="120"/>
+  </g>
+
+  <!-- star sparkles -->
+  <g fill="#FFCC33" fill-opacity="0.7">
+    <path d="M150 130l6 18 18 6-18 6-6 18-6-18-18-6 18-6z"/>
+    <path d="M660 168l5 14 14 5-14 5-5 14-5-14-14-5 14-5z"/>
+    <path d="M620 460l4 12 12 4-12 4-4 12-4-12-12-4 12-4z"/>
+    <path d="M176 452l4 12 12 4-12 4-4 12-4-12-12-4 12-4z"/>
+  </g>
+
+  <ellipse cx="400" cy="310" rx="240" ry="200" fill="url(#gm-glow)"/>
+
+  <!-- gem: crown + pavilion -->
+  <g transform="translate(400 300)">
+    <!-- table + crown -->
+    <path d="M-60-90h120l60 60H-120z" fill="#E8C349"/>
+    <path d="M-60-90h120l-30 60h-60z" fill="#FFE9A8"/>
+    <path d="M-120-30l60-60-30 60z" fill="#C9A231"/>
+    <path d="M120-30l-60-60 30 60z" fill="#C9A231"/>
+    <path d="M-60-90l-30 60h60z" fill="#F5D778"/>
+    <path d="M60-90l30 60H30z" fill="#F5D778"/>
+
+    <!-- pavilion -->
+    <path d="M-120-30L0 130-30-30z" fill="#B8860B"/>
+    <path d="M120-30L0 130 30-30z" fill="#B8860B"/>
+    <path d="M-30-30L0 130 30-30z" fill="#E8C349"/>
+    <path d="M-120-30h30L0 130z" fill="#8A6A15"/>
+    <path d="M120-30H90L0 130z" fill="#8A6A15"/>
+
+    <!-- highlight -->
+    <path d="M-46-84h40l-22 44z" fill="#FFFFFF" fill-opacity="0.55"/>
+  </g>
+
+  <!-- setting band -->
+  <g fill="none" stroke="#D4AF37" stroke-width="8" stroke-opacity="0.5">
+    <ellipse cx="400" cy="470" rx="86" ry="22"/>
+  </g>
+</svg>

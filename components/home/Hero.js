@@ -4,8 +4,11 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Button from '@/components/Button';
 import SmartImage from '@/components/SmartImage';
+import { useAppointmentModal } from '@/components/AppointmentModal';
 
 export default function HomeHero() {
+  const { open: openAppointment } = useAppointmentModal();
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden mandala-bg pt-20">
       {/* Golden Light Rays */}
@@ -73,7 +76,7 @@ export default function HomeHero() {
               transition={{ delay: 0.3 }}
               className="font-serif text-5xl sm:text-6xl font-bold text-foreground leading-tight"
             >
-              Shift Your Energies with{' '}
+              Shift Your Aura with{' '}
               <span className="bg-gradient-to-r from-primary via-gold-light to-accent bg-clip-text text-transparent">
                 Bhawna Upadhyay
               </span>
@@ -100,11 +103,9 @@ export default function HomeHero() {
                   Explore Services
                 </Button>
               </Link>
-              <Link href="/contact">
-                <Button variant="outline" size="lg">
-                  Book Consultation
-                </Button>
-              </Link>
+              <Button variant="outline" size="lg" onClick={openAppointment}>
+                Book Consultation
+              </Button>
             </motion.div>
 
             {/* Trust Badges */}

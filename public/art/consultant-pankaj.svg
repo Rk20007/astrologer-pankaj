@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Pankaj Sir — portrait pending">
+  <defs>
+    <linearGradient id="pk-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3A2412"/>
+      <stop offset="0.6" stop-color="#6B3A0C"/>
+      <stop offset="1" stop-color="#C76B00"/>
+    </linearGradient>
+    <radialGradient id="pk-glow" cx="0.5" cy="0.45" r="0.5">
+      <stop offset="0" stop-color="#FFCC33" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#FFCC33" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="800" height="600" fill="url(#pk-bg)"/>
+
+  <!-- mandala -->
+  <g fill="none" stroke="#D4AF37" stroke-opacity="0.16">
+    <circle cx="400" cy="270" r="150"/>
+    <circle cx="400" cy="270" r="200"/>
+    <circle cx="400" cy="270" r="250"/>
+  </g>
+  <g stroke="#D4AF37" stroke-opacity="0.12">
+    <path d="M400 20v500M150 270h500M223 93l354 354M577 93L223 447"/>
+  </g>
+
+  <ellipse cx="400" cy="270" rx="260" ry="220" fill="url(#pk-glow)"/>
+
+  <!-- monogram medallion -->
+  <circle cx="400" cy="270" r="112" fill="#3A2412" fill-opacity="0.55" stroke="#D4AF37" stroke-width="4"/>
+  <text x="400" y="308" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="96" font-weight="bold" fill="#D4AF37">PS</text>
+
+  <!-- numerology digits, his specialism -->
+  <g fill="#FFCC33" fill-opacity="0.5" font-family="Georgia, 'Times New Roman', serif" font-size="26" text-anchor="middle">
+    <text x="400" y="102">9</text>
+    <text x="568" y="278">3</text>
+    <text x="400" y="452">6</text>
+    <text x="232" y="278">1</text>
+  </g>
+
+  <g fill="#FFCC33" fill-opacity="0.7">
+    <circle cx="150" cy="120" r="3"/><circle cx="668" cy="150" r="2.5"/>
+    <circle cx="660" cy="430" r="3"/><circle cx="140" cy="420" r="2.5"/>
+  </g>
+</svg>

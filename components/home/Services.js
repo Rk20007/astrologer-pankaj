@@ -6,18 +6,24 @@ import { services, consultants } from '@/data/services';
 import SmartImage from '@/components/SmartImage';
 import Link from 'next/link';
 import Button from '@/components/Button';
-import { Clock, IndianRupee, Check } from 'lucide-react';
+import ServicePrice from '@/components/ServicePrice';
+import { useAppointmentModal } from '@/components/AppointmentModal';
+import { Clock, Check } from 'lucide-react';
 
-// Short tab labels for each service
+// Short tab labels, keyed by service id.
 const TAB_LABELS = {
-  'bhawna-kundli': 'Kundli Reading',
-  'bhawna-video': 'Video Consultation',
-  'bhawna-urgent-audio': 'Audio Consultation',
-  'bhawna-marriage': 'Marriage Matching',
+  'bhawna-kundli-audio': 'Kundli (Audio)',
+  'bhawna-kundli-video': 'Kundli (Video)',
+  'bhawna-urgent-audio': 'Urgent Audio',
+  'bhawna-urgent-video': 'Urgent Video',
+  'bhawna-office': 'Office Visit',
+  'bhawna-couple': 'Couple',
+  'bhawna-vastu': 'Vastu',
 };
 
 export default function HomeServices() {
-  // Featured consultant (Bhawna Ma'am) + only her services
+  const { open: openAppointment } = useAppointmentModal();
+  // Featured consultant (Bhawna Upadhyay) + only her services
   const consultant = consultants.find((c) => c.featured) || consultants[0];
   const bhawnaServices = services.filter((s) => s.consultantId === consultant.id);
 
@@ -145,31 +151,15 @@ export default function HomeServices() {
 
                   {/* Pricing + CTA */}
                   <div className="flex flex-col justify-between gap-4">
-                    <div className="space-y-2">
-                      {activeService.waiting && (
-                        <div className="flex items-center justify-between bg-background rounded-lg p-3 border border-accent/40">
-                          <span className="text-xs font-semibold text-foreground uppercase tracking-wide">Standard Rate</span>
-                          <div className="flex items-center gap-1">
-                            <IndianRupee className="w-4 h-4 text-primary" />
-                            <span className="font-bold text-primary text-lg">{activeService.waiting}</span>
-                          </div>
-                        </div>
-                      )}
-                      {activeService.urgent && (
-                        <div className="flex items-center justify-between bg-secondary/5 rounded-lg p-3 border border-secondary/20">
-                          <span className="text-xs font-semibold text-secondary uppercase tracking-wide">Urgent Rate</span>
-                          <div className="flex items-center gap-1">
-                            <IndianRupee className="w-4 h-4 text-secondary" />
-                            <span className="font-bold text-secondary text-lg">{activeService.urgent}</span>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    <Link href="/contact" className="w-full">
-                      <Button variant="primary" size="md" className="w-full text-base font-bold">
-                        Book Consultation
-                      </Button>
-                    </Link>
+                    <ServicePrice service={activeService} />
+                    <Button
+                      variant="primary"
+                      size="md"
+                      className="w-full text-base font-bold"
+                      onClick={openAppointment}
+                    >
+                      Book Consultation
+                    </Button>
                   </div>
                 </div>
               </div>
