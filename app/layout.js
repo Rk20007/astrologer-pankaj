@@ -1,5 +1,6 @@
 import { Analytics } from '@vercel/analytics/next'
 import { AppointmentModalProvider } from '@/components/AppointmentModal'
+import FloatingSocial from '@/components/FloatingSocial'
 import { site } from '@/data/site'
 import './globals.css'
 
@@ -71,6 +72,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className="antialiased">
         <AppointmentModalProvider>{children}</AppointmentModalProvider>
+        <FloatingSocial />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

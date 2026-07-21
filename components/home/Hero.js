@@ -134,7 +134,7 @@ export default function HomeHero() {
           <div className="relative flex items-center justify-center">
             <div className="relative w-full aspect-[4/5] sm:aspect-[3/4] rounded-3xl overflow-hidden ring-1 ring-accent/40 shadow-[0_20px_60px_rgba(212,175,55,0.3)]">
               <SmartImage
-                src="/bhawna-15.jpg"
+                src="/bhawana-012.jpeg"
                 alt="Bhawna Upadhyay — Astrologer & Vastu Consultant"
                 className="w-full h-full object-cover object-center"
               />

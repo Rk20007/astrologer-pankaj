@@ -23,7 +23,7 @@ const bhawnaGallery = [
   { src: '/bhawna-09.jpg', caption: 'At a spiritual gathering' },
   { src: '/bhawna-11.jpg', caption: 'Meeting devotees' },
   { src: '/bhawna-07.jpg', caption: 'With clients' },
-  { src: '/bhawna-06.jpg', caption: 'With clients' },
+  { src: '/bhawana-011.jpeg', caption: 'With clients' },
   { src: '/bhawna-01.jpg', caption: 'With clients' },
 ];
 

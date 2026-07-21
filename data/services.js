@@ -159,7 +159,7 @@ export const consultants = [
     title: 'Vedic Astrologer & Vastu Consultant',
     experience: '15+ years',
     specialization: 'Kundli Reading, Vastu Shastra, Relationship & Career Guidance',
-    image: '/bhawna-01.jpg',
+    image: '/bhawana-011.jpeg',
     bio: 'A TEDx speaker and trusted astrologer, Bhawna Upadhyay combines traditional Vedic astrology and Vastu Shastra with a clear, practical reading of the life in front of her — helping people shift their energies and transform their personal and professional lives.',
     featured: true,
   },
@@ -169,8 +169,7 @@ export const consultants = [
     title: 'Vedic Astrologer & Numerologist',
     experience: '20+ years',
     specialization: 'Vedic Astrology, Numerology, Vastu Shastra',
-    // TODO(launch): swap in a real photograph of Pankaj Sir when one is supplied.
-    image: '/art/consultant-pankaj.svg',
+    image: '/pankaj2.jpeg',
     bio: 'With over two decades of experience, Pankaj Sir has guided thousands of individuals through life\'s challenges with profound astrological and numerological insight.',
   },
 ];

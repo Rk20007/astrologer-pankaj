@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
-const stats = [
+const defaultStats = [
   {
     label: 'Years of Experience',
     value: 20,
@@ -55,7 +55,8 @@ function Counter({ target, duration = 2 }) {
   return count;
 }
 
-export default function HomeStats() {
+export default function HomeStats({ stats: statsProp }) {
+  const stats = Array.isArray(statsProp) && statsProp.length ? statsProp : defaultStats;
   return (
     <section className="relative py-20 bg-gradient-to-br from-background via-white to-background overflow-hidden">
       {/* Decorative Background */}
@@ -95,7 +96,7 @@ export default function HomeStats() {
                 {/* Counter */}
                 <div className="mb-3">
                   <span className="text-6xl font-serif font-bold bg-gradient-to-r from-foreground via-primary to-primary/80 bg-clip-text text-transparent">
-                    <Counter target={stat.value} />
+                    <Counter target={Number(stat.value) || 0} />
                     {stat.suffix}
                   </span>
                 </div>

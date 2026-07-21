@@ -7,28 +7,162 @@ import SmartImage from '@/components/SmartImage';
 import Link from 'next/link';
 import Button from '@/components/Button';
 import ServicePrice from '@/components/ServicePrice';
-import { useAppointmentModal } from '@/components/AppointmentModal';
-import { Clock, Check } from 'lucide-react';
+import { Clock, X } from 'lucide-react';
 
-// Short tab labels, keyed by service id.
-const TAB_LABELS = {
-  'bhawna-kundli-audio': 'Kundli (Audio)',
-  'bhawna-kundli-video': 'Kundli (Video)',
-  'bhawna-urgent-audio': 'Urgent Audio',
-  'bhawna-urgent-video': 'Urgent Video',
-  'bhawna-office': 'Office Visit',
-  'bhawna-couple': 'Couple',
-  'bhawna-vastu': 'Vastu',
-};
+// Modal that lets the visitor pick one of a consultant's services and book it.
+function ServicePickerModal({ consultant, services: list, onClose }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-6">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        onClick={onClose}
+        className="absolute inset-0 bg-foreground/60 backdrop-blur-sm"
+      />
+
+      <motion.div
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Book with ${consultant.name}`}
+        initial={{ opacity: 0, y: 40, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 40, scale: 0.98 }}
+        transition={{ duration: 0.25, ease: 'easeOut' }}
+        className="relative flex max-h-[88vh] w-full max-w-2xl flex-col overflow-hidden rounded-t-3xl border border-accent/50 bg-card shadow-2xl outline-none sm:rounded-3xl"
+      >
+        {/* Header */}
+        <div className="flex items-start gap-4 border-b border-border p-6">
+          <span className="h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-muted ring-1 ring-accent/40">
+            <SmartImage src={consultant.image} alt="" className="h-full w-full object-cover object-top" />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
+              {consultant.title}
+            </p>
+            <h2 className="font-serif text-2xl font-bold text-foreground">
+              Choose a service to book
+            </h2>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            aria-label="Close"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        {/* Service list */}
+        <div className="space-y-4 overflow-y-auto p-6">
+          {list.map((service) => (
+            <div
+              key={service.id}
+              className="rounded-2xl border border-border bg-background/70 p-4 transition-all hover:border-primary/60"
+            >
+              <div className="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:justify-between">
+                <div className="min-w-0">
+                  <h3 className="font-serif text-lg font-bold text-foreground">{service.name}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">{service.description}</p>
+                </div>
+                <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-muted px-3 py-1.5 text-xs font-bold text-foreground">
+                  <Clock className="h-3.5 w-3.5 text-primary" />
+                  {service.duration}
+                </span>
+              </div>
+
+              <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:items-end">
+                <ServicePrice service={service} />
+                <Link
+                  href={`/contact?service=${encodeURIComponent(service.id)}&label=${encodeURIComponent(
+                    service.name
+                  )}&from=${encodeURIComponent(consultant.id)}`}
+                  onClick={onClose}
+                  className="inline-flex w-full items-center justify-center rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white shadow-[0_8px_24px_rgba(199,107,0,0.25)] transition-all hover:bg-accent"
+                >
+                  Book Now
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+// One consultant's intro card, with a Book Now button opening the picker.
+function ConsultantCard({ consultant, services: list, reverse }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div
+      className={`grid grid-cols-1 md:grid-cols-5 gap-8 items-center ${
+        reverse ? 'md:[&>*:first-child]:order-2' : ''
+      }`}
+    >
+      <div className="md:col-span-2 relative rounded-2xl overflow-hidden ring-1 ring-border shadow-lg aspect-[4/5] bg-muted">
+        <SmartImage
+          src={consultant.image}
+          alt={consultant.name}
+          className="w-full h-full object-cover object-top"
+        />
+        {consultant.featured && (
+          <span className="absolute top-4 left-4 px-3 py-1 bg-primary text-white rounded-full text-xs font-semibold uppercase tracking-wide shadow">
+            Featured
+          </span>
+        )}
+      </div>
+
+      <div className="md:col-span-3">
+        <h3 className="font-serif text-3xl font-bold text-foreground mb-1">{consultant.name}</h3>
+        <p className="text-primary font-semibold mb-4">
+          {consultant.title} • {consultant.experience} Experience
+        </p>
+        <p className="text-muted-foreground leading-relaxed mb-6">{consultant.bio}</p>
+        <div className="flex flex-wrap gap-2 mb-6">
+          {consultant.specialization.split(',').map((tag) => (
+            <span
+              key={tag}
+              className="px-3 py-1 bg-muted rounded-full text-sm text-foreground border border-border"
+            >
+              {tag.trim()}
+            </span>
+          ))}
+        </div>
+        <Button
+          variant="primary"
+          size="lg"
+          className="font-bold"
+          onClick={() => setOpen(true)}
+        >
+          Book Now
+        </Button>
+      </div>
+
+      <AnimatePresence>
+        {open && (
+          <ServicePickerModal
+            consultant={consultant}
+            services={list}
+            onClose={() => setOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
 
 export default function HomeServices() {
-  const { open: openAppointment } = useAppointmentModal();
-  // Featured consultant (Bhawna Upadhyay) + only her services
-  const consultant = consultants.find((c) => c.featured) || consultants[0];
-  const bhawnaServices = services.filter((s) => s.consultantId === consultant.id);
-
-  const [activeId, setActiveId] = useState(bhawnaServices[0]?.id);
-  const activeService = bhawnaServices.find((s) => s.id === activeId) || bhawnaServices[0];
+  // Show each consultant with their own set of services.
+  const cards = consultants
+    .map((consultant) => ({
+      consultant,
+      list: services.filter((s) => s.consultantId === consultant.id),
+    }))
+    .filter((c) => c.list.length > 0);
 
   return (
     <section className="py-20 bg-background">
@@ -51,128 +185,26 @@ export default function HomeServices() {
           </p>
         </motion.div>
 
-        {/* Consultant intro with image (the one image at the start) */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 items-center mb-12">
-          <div className="md:col-span-2 relative rounded-2xl overflow-hidden ring-1 ring-border shadow-lg aspect-[4/5] bg-muted">
-            <SmartImage
-              src={consultant.image}
-              alt={consultant.name}
-              className="w-full h-full object-cover object-top"
-            />
-            {consultant.featured && (
-              <span className="absolute top-4 left-4 px-3 py-1 bg-primary text-white rounded-full text-xs font-semibold uppercase tracking-wide shadow">
-                Featured
-              </span>
-            )}
-          </div>
-          <div className="md:col-span-3">
-            <h3 className="font-serif text-3xl font-bold text-foreground mb-1">{consultant.name}</h3>
-            <p className="text-primary font-semibold mb-4">
-              {consultant.title} • {consultant.experience} Experience
-            </p>
-            <p className="text-muted-foreground leading-relaxed mb-6">{consultant.bio}</p>
-            <div className="flex flex-wrap gap-2">
-              {consultant.specialization.split(',').map((tag) => (
-                <span
-                  key={tag}
-                  className="px-3 py-1 bg-muted rounded-full text-sm text-foreground border border-border"
-                >
-                  {tag.trim()}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Service Tabs */}
-        <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8">
-          {bhawnaServices.map((service) => {
-            const isActive = service.id === activeId;
-            return (
-              <button
-                key={service.id}
-                onClick={() => setActiveId(service.id)}
-                className={`px-5 py-2.5 rounded-full text-sm font-semibold border transition-all duration-300 ${
-                  isActive
-                    ? 'bg-primary text-white border-primary shadow-[0_8px_24px_rgba(199,107,0,0.25)]'
-                    : 'bg-card text-foreground border-border hover:border-primary/50'
-                }`}
-              >
-                {TAB_LABELS[service.id] || service.name}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Active Service Panel (no image — the start image is enough) */}
-        <AnimatePresence mode="wait">
-          {activeService && (
+        {/* Consultant cards */}
+        <div className="space-y-16">
+          {cards.map(({ consultant, list }, idx) => (
             <motion.div
-              key={activeService.id}
+              key={consultant.id}
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
-              className="max-w-4xl mx-auto bg-card border border-accent rounded-2xl overflow-hidden shadow-[0_12px_36px_rgba(199,107,0,0.12)]"
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
             >
-              <div className="h-1.5 bg-primary" />
-              <div className="p-8 sm:p-10">
-                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
-                  <div>
-                    <h3 className="font-serif text-2xl sm:text-3xl font-bold text-foreground mb-2">
-                      {activeService.name}
-                    </h3>
-                    <p className="text-muted-foreground">{activeService.description}</p>
-                  </div>
-                  <div className="flex items-center gap-2 bg-muted/50 rounded-xl px-4 py-2 border border-accent/30 flex-shrink-0">
-                    <Clock className="w-4 h-4 text-primary" />
-                    <span className="text-foreground font-bold text-sm">{activeService.duration}</span>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {/* Benefits */}
-                  <div>
-                    <div className="flex items-center gap-2 mb-4">
-                      <span className="text-xs font-bold text-primary uppercase tracking-widest">Includes</span>
-                      <div className="flex-1 h-px bg-gradient-to-r from-primary to-transparent" />
-                    </div>
-                    <ul className="space-y-3">
-                      {activeService.benefits.map((benefit, idx) => (
-                        <li key={idx} className="flex items-start gap-3 text-sm text-foreground">
-                          <span className="w-5 h-5 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center flex-shrink-0 mt-0.5">
-                            <Check className="w-3 h-3 text-white" />
-                          </span>
-                          <span className="font-medium">{benefit}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Pricing + CTA */}
-                  <div className="flex flex-col justify-between gap-4">
-                    <ServicePrice service={activeService} />
-                    <Button
-                      variant="primary"
-                      size="md"
-                      className="w-full text-base font-bold"
-                      onClick={openAppointment}
-                    >
-                      Book Consultation
-                    </Button>
-                  </div>
-                </div>
-              </div>
+              <ConsultantCard consultant={consultant} services={list} reverse={idx % 2 === 1} />
             </motion.div>
-          )}
-        </AnimatePresence>
+          ))}
+        </div>
 
         {/* CTA to Services Page */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mt-12"
+          className="text-center mt-16"
         >
           <Link href="/services">
             <Button variant="primary" size="lg">
