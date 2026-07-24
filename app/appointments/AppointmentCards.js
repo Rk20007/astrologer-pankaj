@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ChevronDown, Zap } from 'lucide-react';
 import SmartImage from '@/components/SmartImage';
 import Button from '@/components/Button';
+import { useBookingModal } from '@/components/BookingModal';
 import { appointmentCards } from '@/data/appointments';
 import { formatINR } from '@/data/site';
 
@@ -31,15 +32,8 @@ function PriceTag({ option }) {
   );
 }
 
-function OptionRow({ option, cardId }) {
-  // Online Pooja options map to real puja ids, so send them into the dedicated
-  // Sankalp booking flow; everything else uses the general contact form.
-  const bookingHref =
-    cardId === 'online-pooja'
-      ? `/puja/book/${option.id}`
-      : `/contact?service=${encodeURIComponent(option.id)}&label=${encodeURIComponent(
-          option.label
-        )}&from=${encodeURIComponent(cardId)}`;
+function OptionRow({ option, cardId, cardTitle }) {
+  const { openBooking } = useBookingModal();
 
   return (
     <div className="rounded-2xl border border-border p-5 bg-background/80">
@@ -72,12 +66,29 @@ function OptionRow({ option, cardId }) {
 
         <div className="flex flex-col items-start gap-2 sm:items-end shrink-0">
           <PriceTag option={option} />
-          <Link
-            href={bookingHref}
-            className="text-sm font-semibold text-primary hover:text-accent transition-colors whitespace-nowrap"
-          >
-            Continue to book →
-          </Link>
+          {cardId === 'online-pooja' ? (
+            <Link
+              href={`/puja/book/${option.id}`}
+              className="text-sm font-semibold text-primary hover:text-accent transition-colors whitespace-nowrap"
+            >
+              Continue to book →
+            </Link>
+          ) : cardId === 'kundali-pdf' ? (
+            <Link
+              href="/kundali/book"
+              className="text-sm font-semibold text-primary hover:text-accent transition-colors whitespace-nowrap"
+            >
+              Continue to Book →
+            </Link>
+          ) : (
+            <button
+              type="button"
+              onClick={() => openBooking({ option, consultant: cardId, cardTitle })}
+              className="text-sm font-semibold text-primary hover:text-accent transition-colors whitespace-nowrap"
+            >
+              Continue to book →
+            </button>
+          )}
         </div>
       </div>
     </div>
@@ -144,7 +155,7 @@ export default function AppointmentCards() {
               {isOpen && (
                 <div id={`${card.id}-options`} className="space-y-4">
                   {card.options.map((option) => (
-                    <OptionRow key={option.id} option={option} cardId={card.id} />
+                    <OptionRow key={option.id} option={option} cardId={card.id} cardTitle={card.title} />
                   ))}
 
                   {card.footerLink && (

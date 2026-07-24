@@ -1,4 +1,5 @@
 import { forwardRef } from 'react';
+import { cn } from '@/lib/utils';
 
 const buttonVariants = {
   primary: 'bg-primary text-white font-semibold rounded-xl border border-primary hover:bg-accent hover:text-foreground hover:shadow-[0_8px_24px_rgba(199,107,0,0.35)] active:scale-95 transform transition-all duration-300 ease-in-out',
@@ -6,6 +7,11 @@ const buttonVariants = {
   outline: 'border-2 border-primary text-primary bg-background hover:bg-primary hover:text-white hover:shadow-[0_8px_24px_rgba(199,107,0,0.3)] font-semibold rounded-xl active:scale-95 transform transition-all duration-300 ease-in-out',
   ghost: 'text-foreground hover:bg-muted font-medium rounded-lg active:scale-95 transition-all duration-300 ease-in-out',
   accent: 'bg-accent text-foreground font-semibold rounded-xl border border-accent hover:bg-primary hover:text-white hover:shadow-[0_8px_24px_rgba(212,175,55,0.35)] active:scale-95 transform transition-all duration-300 ease-in-out',
+  // For use on dark/coloured sections: a solid white button and a transparent
+  // white-outlined button. Self-contained so callers never need conflicting
+  // className overrides.
+  light: 'bg-white text-secondary font-semibold rounded-xl border border-white hover:bg-gold-light hover:text-secondary hover:shadow-[0_8px_24px_rgba(0,0,0,0.18)] active:scale-95 transform transition-all duration-300 ease-in-out',
+  onDark: 'bg-transparent text-white font-semibold rounded-xl border-2 border-white/80 hover:bg-white/10 active:scale-95 transform transition-all duration-300 ease-in-out',
 };
 
 const sizeVariants = {
@@ -35,7 +41,7 @@ const Button = forwardRef(
     return (
       <button
         ref={ref}
-        className={`${baseStyles} ${variantStyles} ${sizeStyles} ${className}`}
+        className={cn(baseStyles, variantStyles, sizeStyles, className)}
         disabled={disabled}
         {...props}
       >

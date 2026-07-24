@@ -3,6 +3,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import FloatingButtons from '@/components/FloatingButtons';
 import Button from '@/components/Button';
+import BookNowButton from '@/components/BookNowButton';
 import FAQAccordion from '@/components/FAQAccordion';
 import SmartImage from '@/components/SmartImage';
 import { consultants, pricingFAQ } from '@/data/pricing';
@@ -15,15 +16,19 @@ export const metadata = {
     'Consultation charges for Bhawna Upadhyay and Pankaj Sir — kundli reading, urgent audio and video consultations, office and couple consultations, and Vastu.',
 };
 
-function bookingHref(plan, tierLabel) {
-  const label = tierLabel ? `${plan.name} — ${tierLabel}` : `${plan.name} (${plan.mode})`;
+function bookingOption(plan, tierLabel) {
+  const label = tierLabel
+    ? `${plan.name} — ${tierLabel}`
+    : plan.mode
+      ? `${plan.name} (${plan.mode})`
+      : plan.name;
   const id = tierLabel
     ? `${plan.id}-${tierLabel.toLowerCase().replace(/\s+/g, '-')}`
     : plan.id;
-  return `/contact?service=${encodeURIComponent(id)}&label=${encodeURIComponent(label)}`;
+  return { id, label };
 }
 
-function PlanCard({ plan }) {
+function PlanCard({ plan, consultant }) {
   return (
     <div
       className={`relative flex flex-col rounded-3xl border bg-card p-7 shadow-sm transition-shadow hover:shadow-lg ${
@@ -109,19 +114,30 @@ function PlanCard({ plan }) {
       {plan.tiers ? (
         <div className="mt-6 grid gap-2">
           {plan.tiers.map((tier) => (
-            <Link key={tier.label} href={bookingHref(plan, tier.label)}>
-              <Button variant="outline" size="sm" className="w-full">
-                Enquire — {tier.label}
-              </Button>
-            </Link>
+            <BookNowButton
+              key={tier.label}
+              option={bookingOption(plan, tier.label)}
+              consultant={consultant.id}
+              cardTitle={consultant.name}
+              variant="outline"
+              size="sm"
+              className="w-full"
+            >
+              Enquire — {tier.label}
+            </BookNowButton>
           ))}
         </div>
       ) : (
-        <Link href={bookingHref(plan)} className="mt-6">
-          <Button variant={plan.popular ? 'primary' : 'outline'} size="md" className="w-full">
-            Book This
-          </Button>
-        </Link>
+        <BookNowButton
+          option={bookingOption(plan)}
+          consultant={consultant.id}
+          cardTitle={consultant.name}
+          variant={plan.popular ? 'primary' : 'outline'}
+          size="md"
+          className="mt-6 w-full"
+        >
+          Book This
+        </BookNowButton>
       )}
     </div>
   );
@@ -176,7 +192,7 @@ export default function PricingPage() {
 
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {consultant.plans.map((plan) => (
-                  <PlanCard key={plan.id} plan={plan} />
+                  <PlanCard key={plan.id} plan={plan} consultant={consultant} />
                 ))}
               </div>
             </div>

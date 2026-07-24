@@ -1,5 +1,14 @@
 import { NextResponse } from 'next/server';
 import { contactInfo } from '@/data/site';
+import { createLead, markLeadDelivered, getBookedSlots, SlotTakenError } from '@/lib/leads';
+import {
+  getAvailabilityConfig,
+  buildDaySlots,
+  isValidDate,
+  isValidTime,
+  resolveConsultant,
+  CONSULTANTS,
+} from '@/lib/availability';
 
 export const runtime = 'nodejs';
 
@@ -9,6 +18,9 @@ const MAX_LENGTHS = {
   phone: 32,
   service: 200,
   message: 4000,
+  date: 10,
+  slot: 5,
+  cardId: 60,
   // Puja (Sankalp + billing) fields.
   yajmanName: 120,
   gotra: 120,
@@ -77,6 +89,69 @@ function validate(body) {
 
   const service = typeof body.service === 'string' ? body.service.trim() : '';
   clean.service = service.slice(0, MAX_LENGTHS.service);
+
+  return { errors, clean };
+}
+
+// A consultation books a specific consultant on a date + time slot. The slot
+// itself is validated against the live availability config in the POST handler.
+function validateConsultation(body) {
+  const errors = {};
+  const clean = {};
+
+  for (const field of ['name', 'email', 'phone']) {
+    const value = typeof body[field] === 'string' ? body[field].trim() : '';
+    if (!value) {
+      errors[field] = 'This field is required.';
+      continue;
+    }
+    if (value.length > MAX_LENGTHS[field]) {
+      errors[field] = `Please keep this under ${MAX_LENGTHS[field]} characters.`;
+      continue;
+    }
+    clean[field] = value;
+  }
+
+  if (clean.email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(clean.email)) {
+    errors.email = 'Please enter a valid email address.';
+  }
+  if (clean.phone && !/^[\d\s+()-]{7,}$/.test(clean.phone)) {
+    errors.phone = 'Please enter a valid phone number.';
+  }
+
+  const consultantKey = resolveConsultant(
+    typeof body.cardId === 'string' ? body.cardId.trim() : ''
+  );
+  if (!consultantKey) {
+    errors.cardId = 'Please choose a consultant.';
+  } else {
+    clean.cardId = consultantKey;
+  }
+
+  if (!isValidDate(body.date)) {
+    errors.date = 'Please choose a date.';
+  } else {
+    clean.date = body.date;
+  }
+
+  if (!isValidTime(body.slot)) {
+    errors.slot = 'Please choose a time slot.';
+  } else {
+    clean.slot = body.slot;
+  }
+
+  // Message is optional for a consultation, but stored (birth details etc.).
+  const message = typeof body.message === 'string' ? body.message.trim() : '';
+  if (message.length > MAX_LENGTHS.message) {
+    errors.message = `Please keep this under ${MAX_LENGTHS.message} characters.`;
+  } else if (message) {
+    clean.message = message;
+  }
+
+  clean.service =
+    typeof body.service === 'string'
+      ? body.service.trim().slice(0, MAX_LENGTHS.service)
+      : '';
 
   return { errors, clean };
 }
@@ -225,18 +300,61 @@ function buildPujaEmail(data) {
   `;
 }
 
+function buildConsultationEmail(data) {
+  const rows = [
+    ['Consultant', CONSULTANTS[data.cardId] || data.cardId],
+    ['Service', data.service || '—'],
+    ['Date', data.date],
+    ['Time', data.slot],
+    ['Name', data.name],
+    ['Email', data.email],
+    ['Phone', data.phone],
+  ]
+    .map(
+      ([label, value]) =>
+        `<tr><td style="padding:6px 14px 6px 0;color:#6B5344;white-space:nowrap;">${label}</td><td style="padding:6px 0;font-weight:600;color:#3A2412;">${escapeHtml(
+          value
+        )}</td></tr>`
+    )
+    .join('');
+
+  const messageBlock = data.message
+    ? `<p style="color:#6B5344;margin:20px 0 6px;">Message</p>
+       <div style="white-space:pre-wrap;padding:14px;background:#F8F3E8;border-radius:10px;color:#3A2412;">${escapeHtml(
+         data.message
+       )}</div>`
+    : '';
+
+  return `
+    <div style="font-family:system-ui,sans-serif;max-width:600px;">
+      <h2 style="color:#C76B00;margin:0 0 16px;">New appointment booking</h2>
+      <table style="border-collapse:collapse;margin-bottom:8px;">${rows}</table>
+      ${messageBlock}
+    </div>
+  `;
+}
+
 async function sendEmail(data, kind) {
   const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.BOOKING_EMAIL_TO || contactInfo.email;
   const from = process.env.BOOKING_EMAIL_FROM;
 
   const isPuja = kind === 'puja';
+  const isConsultation = kind === 'consultation';
   const pujaLabel = data.pujaName || data.service || 'Puja / Anushthan';
-  const subject = isPuja
-    ? `Puja booking: ${pujaLabel} — ${data.name}`
-    : data.service
-      ? `Booking request: ${data.service} — ${data.name}`
-      : `New enquiry from ${data.name}`;
+  const subject = isConsultation
+    ? `Appointment: ${CONSULTANTS[data.cardId] || 'Consultation'} — ${data.date} ${data.slot} — ${data.name}`
+    : isPuja
+      ? `Puja booking: ${pujaLabel} — ${data.name}`
+      : data.service
+        ? `Booking request: ${data.service} — ${data.name}`
+        : `New enquiry from ${data.name}`;
+
+  const html = isConsultation
+    ? buildConsultationEmail(data)
+    : isPuja
+      ? buildPujaEmail(data)
+      : buildEmail(data);
 
   // No mail credentials configured yet — log it so the enquiry is at least
   // recoverable from server logs, and tell the caller it was not delivered.
@@ -259,7 +377,7 @@ async function sendEmail(data, kind) {
       to: [to],
       reply_to: data.email,
       subject,
-      html: isPuja ? buildPujaEmail(data) : buildEmail(data),
+      html,
     }),
   });
 
@@ -296,13 +414,78 @@ export async function POST(request) {
       return NextResponse.json({ ok: true });
     }
 
-    const kind = body.kind === 'puja' ? 'puja' : 'contact';
-    const { errors, clean } = kind === 'puja' ? validatePuja(body) : validate(body);
+    const kind =
+      body.kind === 'puja' ? 'puja' : body.kind === 'consultation' ? 'consultation' : 'contact';
+
+    const { errors, clean } =
+      kind === 'puja'
+        ? validatePuja(body)
+        : kind === 'consultation'
+          ? validateConsultation(body)
+          : validate(body);
+
     if (Object.keys(errors).length > 0) {
       return NextResponse.json({ ok: false, errors }, { status: 400 });
     }
 
-    const { delivered } = await sendEmail(clean, kind);
+    // For a consultation, confirm the slot is genuinely offerable (not a past
+    // date, a closed day, an off date, or an already-taken slot) before we try
+    // to reserve it. The unique index closes the final race at insert time.
+    if (kind === 'consultation') {
+      const today = new Date().toISOString().slice(0, 10);
+      if (clean.date < today) {
+        return NextResponse.json(
+          { ok: false, errors: { date: 'That date has already passed.' } },
+          { status: 400 }
+        );
+      }
+
+      const config = await getAvailabilityConfig();
+      const booked = await getBookedSlots(clean.cardId, clean.date);
+      const { closed, slots } = buildDaySlots(config, clean.date, booked);
+      const match = slots.find((s) => s.time === clean.slot);
+
+      if (closed || !match) {
+        return NextResponse.json(
+          { ok: false, errors: { slot: 'That time is no longer available. Please pick another.' } },
+          { status: 409 }
+        );
+      }
+      if (!match.available) {
+        return NextResponse.json(
+          { ok: false, errors: { slot: 'That slot has just been booked. Please pick another.' } },
+          { status: 409 }
+        );
+      }
+    }
+
+    // Persist the lead first so a booking is never lost to an email failure —
+    // and, for consultations, so the slot is reserved atomically.
+    let leadId = null;
+    try {
+      const lead = await createLead({ kind, ...clean });
+      leadId = lead.id;
+    } catch (err) {
+      if (err instanceof SlotTakenError) {
+        return NextResponse.json(
+          { ok: false, errors: { slot: err.message } },
+          { status: 409 }
+        );
+      }
+      // If the DB is unreachable we still try to email, so the enquiry is not
+      // silently dropped.
+      console.error('[booking] could not store lead:', err.message);
+    }
+
+    let delivered = false;
+    try {
+      ({ delivered } = await sendEmail(clean, kind));
+    } catch (err) {
+      // The lead is already saved; surface the email failure only in logs.
+      console.error('[booking] email send failed:', err.message);
+    }
+
+    if (leadId) await markLeadDelivered(leadId, delivered);
 
     return NextResponse.json({ ok: true, delivered });
   } catch (error) {

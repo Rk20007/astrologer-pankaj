@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronDown, Zap, ArrowLeft } from 'lucide-react';
 import SmartImage from '@/components/SmartImage';
+import { useBookingModal } from '@/components/BookingModal';
 import { appointmentCards } from '@/data/appointments';
 import { formatINR } from '@/data/site';
 
@@ -38,39 +39,63 @@ function PriceTag({ option }) {
   );
 }
 
-function OptionRow({ option, cardId, onNavigate }) {
-  // Online Pooja options map to real puja ids → dedicated Sankalp booking flow.
-  const href =
-    cardId === 'online-pooja'
-      ? `/puja/book/${option.id}`
-      : `/contact?service=${encodeURIComponent(option.id)}&label=${encodeURIComponent(
-          option.label
-        )}&from=${encodeURIComponent(cardId)}`;
+function OptionRow({ option, cardId, cardTitle, onNavigate }) {
+  const { openBooking } = useBookingModal();
 
-  return (
-    <Link
-      href={href}
-      onClick={onNavigate}
-      className="block rounded-2xl border border-border bg-background/70 p-4 transition-all hover:border-primary/60 hover:bg-primary/5"
-    >
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div className="min-w-0">
-          <p className="font-semibold text-foreground">{option.label}</p>
-          {option.meta?.length > 0 && (
-            <p className="mt-1 text-xs text-muted-foreground">{option.meta.join(' • ')}</p>
-          )}
-          {option.urgentPrice && (
-            <p className="mt-1.5 inline-flex items-center gap-1 text-xs font-semibold text-secondary">
-              <Zap className="h-3 w-3" />
-              Urgent {formatINR(option.urgentPrice)} ({option.urgentNote})
-            </p>
-          )}
-        </div>
-        <div className="shrink-0">
-          <PriceTag option={option} />
-        </div>
+  const inner = (
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+      <div className="min-w-0">
+        <p className="font-semibold text-foreground">{option.label}</p>
+        {option.meta?.length > 0 && (
+          <p className="mt-1 text-xs text-muted-foreground">{option.meta.join(' • ')}</p>
+        )}
+        {option.urgentPrice && (
+          <p className="mt-1.5 inline-flex items-center gap-1 text-xs font-semibold text-secondary">
+            <Zap className="h-3 w-3" />
+            Urgent {formatINR(option.urgentPrice)} ({option.urgentNote})
+          </p>
+        )}
       </div>
-    </Link>
+      <div className="shrink-0">
+        <PriceTag option={option} />
+      </div>
+    </div>
+  );
+
+  const className =
+    'block w-full rounded-2xl border border-border bg-background/70 p-4 text-left transition-all hover:border-primary/60 hover:bg-primary/5';
+
+  // Online Pooja options map to real puja ids → dedicated Sankalp booking flow.
+  if (cardId === 'online-pooja') {
+    return (
+      <Link href={`/puja/book/${option.id}`} onClick={onNavigate} className={className}>
+        {inner}
+      </Link>
+    );
+  }
+
+  // Detailed Kundali PDF → its own premium request flow.
+  if (cardId === 'kundali-pdf') {
+    return (
+      <Link href="/kundali/book" onClick={onNavigate} className={className}>
+        {inner}
+      </Link>
+    );
+  }
+
+  // Everything else books in-place: consultations pick a slot, other services
+  // open a quick enquiry — no navigation to the contact page.
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        onNavigate?.();
+        openBooking({ option, consultant: cardId, cardTitle });
+      }}
+      className={className}
+    >
+      {inner}
+    </button>
   );
 }
 
@@ -108,7 +133,13 @@ function ModalBody({ onClose }) {
 
         <div className="space-y-3 overflow-y-auto p-6">
           {active.options.map((option) => (
-            <OptionRow key={option.id} option={option} cardId={active.id} onNavigate={onClose} />
+            <OptionRow
+              key={option.id}
+              option={option}
+              cardId={active.id}
+              cardTitle={active.title}
+              onNavigate={onClose}
+            />
           ))}
         </div>
       </>

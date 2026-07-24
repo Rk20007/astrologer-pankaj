@@ -66,7 +66,7 @@ export default function ContentEditorClient({ contentKey, label, description, in
 
   return (
     <div>
-      <Link href="/admin" className="mb-4 inline-block text-sm text-gray-500 hover:text-gray-800">
+      <Link href="/admin/content" className="mb-4 inline-block text-sm text-gray-500 hover:text-gray-800">
         ← All sections
       </Link>
 

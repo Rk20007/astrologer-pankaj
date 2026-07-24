@@ -7,10 +7,12 @@ import SmartImage from '@/components/SmartImage';
 import Link from 'next/link';
 import Button from '@/components/Button';
 import ServicePrice from '@/components/ServicePrice';
+import { useBookingModal } from '@/components/BookingModal';
 import { Clock, X } from 'lucide-react';
 
 // Modal that lets the visitor pick one of a consultant's services and book it.
 function ServicePickerModal({ consultant, services: list, onClose }) {
+  const { openBooking } = useBookingModal();
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-6">
       <motion.div
@@ -75,15 +77,20 @@ function ServicePickerModal({ consultant, services: list, onClose }) {
 
               <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:items-end">
                 <ServicePrice service={service} />
-                <Link
-                  href={`/contact?service=${encodeURIComponent(service.id)}&label=${encodeURIComponent(
-                    service.name
-                  )}&from=${encodeURIComponent(consultant.id)}`}
-                  onClick={onClose}
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    openBooking({
+                      option: { id: service.id, label: service.name },
+                      consultant: consultant.id,
+                      cardTitle: consultant.name,
+                    });
+                  }}
                   className="inline-flex w-full items-center justify-center rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white shadow-[0_8px_24px_rgba(199,107,0,0.25)] transition-all hover:bg-accent"
                 >
                   Book Now
-                </Link>
+                </button>
               </div>
             </div>
           ))}

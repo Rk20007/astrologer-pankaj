@@ -1,5 +1,6 @@
 import { Analytics } from '@vercel/analytics/next'
 import { AppointmentModalProvider } from '@/components/AppointmentModal'
+import { BookingModalProvider } from '@/components/BookingModal'
 import FloatingSocial from '@/components/FloatingSocial'
 import { site } from '@/data/site'
 import './globals.css'
@@ -71,7 +72,9 @@ export default function RootLayout({ children }) {
         <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body className="antialiased">
-        <AppointmentModalProvider>{children}</AppointmentModalProvider>
+        <BookingModalProvider>
+          <AppointmentModalProvider>{children}</AppointmentModalProvider>
+        </BookingModalProvider>
         <FloatingSocial />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
