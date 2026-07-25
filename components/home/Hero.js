@@ -129,6 +129,7 @@ export default function HomeHero() {
               </div>
             </motion.div>
           </motion.div>
+          
 
           {/* Right Visual Element - Bhawna Upadhyay Banner */}
           <div className="relative flex items-center justify-center">
