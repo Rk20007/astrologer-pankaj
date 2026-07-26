@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { CheckCircle2, AlertCircle, Minus, Plus } from 'lucide-react';
 import Button from '@/components/Button';
+import PaymentPanel from '@/components/PaymentPanel';
 import { formatINR } from '@/data/site';
 
 // Defined at module scope, not inside the form component — a component created
@@ -64,6 +65,9 @@ export default function PujaBookingForm({ puja }) {
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState('idle'); // idle | sending | sent | error
   const [feedback, setFeedback] = useState('');
+  // Held after a successful submit so the payment step can prefill the contact
+  // details and the amount, even though the form itself has been cleared.
+  const [submitted, setSubmitted] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -105,6 +109,13 @@ export default function PujaBookingForm({ puja }) {
         return;
       }
 
+      setSubmitted({
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email,
+        quantity,
+        amount: puja.price * quantity,
+      });
       setStatus('sent');
       setFormData(EMPTY);
       setQuantity(1);
@@ -123,17 +134,39 @@ export default function PujaBookingForm({ puja }) {
 
   if (status === 'sent') {
     return (
-      <div className="rounded-3xl border border-border bg-card p-10 text-center">
-        <CheckCircle2 className="mx-auto mb-5 h-14 w-14 text-secondary" />
-        <h2 className="mb-3 font-serif text-3xl font-bold text-foreground">Booking received</h2>
-        <p className="mx-auto mb-8 max-w-md leading-relaxed text-muted-foreground">
-          Thank you. Your Sankalp details for <span className="font-semibold">{puja.name}</span> have
-          been received. You will be contacted on WhatsApp with the muhurat, confirmation and payment
-          details. Please allow up to 24 hours for a response.
-        </p>
-        <Button variant="outline" size="md" onClick={() => setStatus('idle')}>
-          Book another puja
-        </Button>
+      <div className="space-y-8">
+        <div className="rounded-3xl border border-border bg-card p-10 text-center">
+          <CheckCircle2 className="mx-auto mb-5 h-14 w-14 text-secondary" />
+          <h2 className="mb-3 font-serif text-3xl font-bold text-foreground">Booking received</h2>
+          <p className="mx-auto mb-8 max-w-md leading-relaxed text-muted-foreground">
+            Thank you. Your Sankalp details for <span className="font-semibold">{puja.name}</span>{' '}
+            have been received. Complete the payment below to confirm the booking — you will then be
+            contacted on WhatsApp with the muhurat and the confirmation.
+          </p>
+          <Button
+            variant="outline"
+            size="md"
+            onClick={() => {
+              setSubmitted(null);
+              setStatus('idle');
+            }}
+          >
+            Book another puja
+          </Button>
+        </div>
+
+        <PaymentPanel
+          kind="puja"
+          service={
+            submitted?.quantity > 1 ? `${puja.name} × ${submitted.quantity}` : puja.name
+          }
+          amount={submitted?.amount}
+          defaults={{
+            name: submitted?.name,
+            phone: submitted?.phone,
+            email: submitted?.email,
+          }}
+        />
       </div>
     );
   }
@@ -272,8 +305,8 @@ export default function PujaBookingForm({ puja }) {
       </div>
 
       <p className="text-center text-xs text-muted-foreground">
-        No payment is taken online. Your details are kept confidential and you will be contacted to
-        confirm the muhurat and payment.
+        Payment details are shown on the next step. Your details are kept confidential and you will
+        be contacted to confirm the muhurat.
       </p>
     </form>
   );

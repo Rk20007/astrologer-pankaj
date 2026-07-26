@@ -7,6 +7,7 @@ import {
   addInternalNote,
   STATUS_KEYS,
 } from '@/lib/kundali';
+import { listPaymentsForRef } from '@/lib/payments';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -21,7 +22,8 @@ export async function GET(request, { params }) {
   if (!req) return NextResponse.json({ ok: false, error: 'Not found.' }, { status: 404 });
 
   const logs = await getStatusLogs(id);
-  return NextResponse.json({ ok: true, request: req, logs });
+  const payments = await listPaymentsForRef(id).catch(() => []);
+  return NextResponse.json({ ok: true, request: req, logs, payments });
 }
 
 // Update status and/or append an internal note in one call.
@@ -60,7 +62,8 @@ export async function PATCH(request, { params }) {
 
     const req = await getRequest(id);
     const logs = await getStatusLogs(id);
-    return NextResponse.json({ ok: true, request: req, logs });
+    const payments = await listPaymentsForRef(id).catch(() => []);
+    return NextResponse.json({ ok: true, request: req, logs, payments });
   } catch (err) {
     console.error('[admin/kundali] update failed:', err);
     return NextResponse.json({ ok: false, error: 'Could not update request.' }, { status: 500 });

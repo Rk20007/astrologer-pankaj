@@ -10,7 +10,10 @@ export default function HomeHero() {
   const { open: openAppointment } = useAppointmentModal();
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden mandala-bg pt-20">
+    // The navbar is fixed and already leaves a 4rem spacer above this section,
+    // so only desktop gets the extra breathing room — on phones that stacked up
+    // into a large empty band between the logo and the headline.
+    <section className="relative flex items-center justify-center overflow-hidden mandala-bg pb-12 pt-4 sm:pt-8 md:min-h-[calc(100vh-4rem)] md:pb-16 md:pt-6">
       {/* Golden Light Rays */}
       <div className="absolute inset-0 pointer-events-none">
         <motion.div
@@ -51,13 +54,15 @@ export default function HomeHero() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        {/* items-start on desktop: centring the shorter text column against the
+            tall portrait pushed the headline a long way down the page. */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center md:items-start">
           {/* Left Content */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="space-y-6"
+            className="space-y-5 md:space-y-6"
           >
             <motion.div
               initial={{ opacity: 0 }}
@@ -153,7 +158,7 @@ export default function HomeHero() {
       <motion.div
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-muted-foreground"
+        className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 text-muted-foreground md:block"
       >
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path

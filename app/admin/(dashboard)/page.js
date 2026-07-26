@@ -1,6 +1,7 @@
 import Link from 'next/link';
-import { Inbox, CalendarClock, CheckCircle2, Clock, ArrowRight, FileText, ImageIcon } from 'lucide-react';
+import { Inbox, CalendarClock, Clock, ArrowRight, FileText, ImageIcon, IndianRupee } from 'lucide-react';
 import { getLeadStats, listLeads } from '@/lib/leads';
+import { getPaymentStats } from '@/lib/payments';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,12 +22,18 @@ function formatWhen(value) {
 
 async function loadData() {
   try {
-    const [stats, recent] = await Promise.all([getLeadStats(), listLeads({ limit: 6 })]);
-    return { stats, recent, error: false };
+    const [stats, recent, payments] = await Promise.all([
+      getLeadStats(),
+      listLeads({ limit: 6 }),
+      // A payment collection that doesn't exist yet is not an error — show zeroes.
+      getPaymentStats().catch(() => ({ total: 0, statusCounts: {}, approvedAmount: 0 })),
+    ]);
+    return { stats, recent, payments, error: false };
   } catch {
     return {
       stats: { total: 0, new: 0, upcoming: 0, statusCounts: {} },
       recent: [],
+      payments: { total: 0, statusCounts: {}, approvedAmount: 0 },
       error: true,
     };
   }
@@ -47,7 +54,8 @@ function StatCard({ icon: Icon, label, value, accent, tint }) {
 }
 
 export default async function AdminDashboard() {
-  const { stats, recent, error } = await loadData();
+  const { stats, recent, payments, error } = await loadData();
+  const pendingPayments = payments?.statusCounts?.pending_verification || 0;
 
   return (
     <div>
@@ -69,8 +77,30 @@ export default async function AdminDashboard() {
         <StatCard icon={Inbox} label="Total leads" value={stats.total} accent="text-gray-900" tint="bg-gray-100 text-gray-600" />
         <StatCard icon={Clock} label="New / unread" value={stats.new} accent="text-amber-600" tint="bg-amber-100 text-amber-700" />
         <StatCard icon={CalendarClock} label="Upcoming appointments" value={stats.upcoming} accent="text-emerald-600" tint="bg-emerald-100 text-emerald-700" />
-        <StatCard icon={CheckCircle2} label="Confirmed" value={stats.statusCounts?.confirmed || 0} accent="text-blue-600" tint="bg-blue-100 text-blue-700" />
+        <StatCard icon={IndianRupee} label="Payments to verify" value={pendingPayments} accent="text-violet-600" tint="bg-violet-100 text-violet-700" />
       </div>
+
+      {pendingPayments > 0 && (
+        <Link
+          href="/admin/payments"
+          className="mt-4 flex items-center justify-between gap-3 rounded-2xl border border-violet-200 bg-violet-50 px-5 py-4 transition-colors hover:bg-violet-100"
+        >
+          <span className="flex items-center gap-3">
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-200 text-violet-800">
+              <IndianRupee className="h-5 w-5" />
+            </span>
+            <span>
+              <span className="block font-semibold text-violet-900">
+                {pendingPayments} payment{pendingPayments === 1 ? '' : 's'} waiting for verification
+              </span>
+              <span className="block text-sm text-violet-700">
+                Check each UTR against the bank statement, then approve.
+              </span>
+            </span>
+          </span>
+          <ArrowRight className="h-5 w-5 shrink-0 text-violet-700" />
+        </Link>
+      )}
 
       <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Recent leads */}
@@ -126,6 +156,13 @@ export default async function AdminDashboard() {
               <span>
                 <span className="block font-semibold text-gray-900 group-hover:text-amber-700">Leads &amp; Bookings</span>
                 <span className="block text-sm text-gray-500">See and manage every enquiry.</span>
+              </span>
+            </Link>
+            <Link href="/admin/payments" className="group flex items-start gap-3 rounded-2xl border border-gray-200 bg-white p-4 transition-all hover:border-amber-400 hover:shadow-md">
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-100 text-violet-700"><IndianRupee className="h-5 w-5" /></span>
+              <span>
+                <span className="block font-semibold text-gray-900 group-hover:text-amber-700">Payments</span>
+                <span className="block text-sm text-gray-500">Verify UTRs and approve payments.</span>
               </span>
             </Link>
             <Link href="/admin/availability" className="group flex items-start gap-3 rounded-2xl border border-gray-200 bg-white p-4 transition-all hover:border-amber-400 hover:shadow-md">

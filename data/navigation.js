@@ -1,4 +1,5 @@
 import { youtubeChannelUrl } from './podcasts';
+import { instagramProfileUrl } from './reels';
 
 // Contact details live in data/site.js — re-exported so existing imports keep working.
 export { contactInfo } from './site';
@@ -59,6 +60,7 @@ export const footerLinks = [
       { label: 'Consultation Charges', href: '/pricing' },
       { label: 'Vastu Consultation', href: '/pricing#bhawna' },
       { label: 'Detailed Kundali PDF', href: '/appointments#kundali-pdf' },
+      { label: 'Make a Payment', href: '/payment' },
     ],
   },
   {
@@ -89,9 +91,10 @@ export const socialLinks = [
   },
   {
     platform: 'instagram',
-    url: 'https://instagram.com',
+    url: instagramProfileUrl,
     label: 'Instagram',
   },
+  // TODO(launch): swap in the real Facebook page when one is supplied.
   {
     platform: 'facebook',
     url: 'https://facebook.com',

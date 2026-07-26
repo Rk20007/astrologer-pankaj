@@ -6,6 +6,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { CheckCircle2, AlertCircle, User, Star, MessageSquareText, ArrowRight, Home, ClipboardList, Download } from 'lucide-react';
 import { kundaliRequestSchema, kundaliDefaultValues, LANGUAGES } from '@/lib/kundaliSchema';
+import PaymentPanel from '@/components/PaymentPanel';
+import { SERVICE_NAME } from '@/lib/kundaliStatusMeta';
 
 function Field({ label, required, error, hint, children }) {
   return (
@@ -65,7 +67,14 @@ export default function KundaliBookingForm() {
         return;
       }
 
-      setResult({ code: data.code, id: data.id });
+      // Keep the contact details so the payment step doesn't ask for them again.
+      setResult({
+        code: data.code,
+        id: data.id,
+        name: values.name,
+        phone: values.phone,
+        email: values.email,
+      });
       if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch {
       setServerError('Could not reach the server. Please check your connection and try again.');
@@ -74,12 +83,13 @@ export default function KundaliBookingForm() {
 
   if (result) {
     return (
+      <div className="mx-auto max-w-4xl space-y-8">
       <div className="mx-auto max-w-xl rounded-3xl border border-accent/40 bg-card p-8 text-center shadow-sm sm:p-12">
         <CheckCircle2 className="mx-auto mb-5 h-16 w-16 text-primary" />
         <h2 className="mb-3 font-serif text-3xl font-bold text-foreground">Request received</h2>
         <p className="mx-auto mb-6 max-w-md leading-relaxed text-muted-foreground">
-          Thank you! Your Detailed Kundali PDF request has been received. Our astrologer will review
-          your birth details and contact you shortly.
+          Thank you! Your Detailed Kundali PDF request has been received. Complete the payment below
+          to confirm it — our astrologer begins the reading once the payment is verified.
         </p>
         {result.code && (
           <p className="mb-6 inline-block rounded-full bg-muted px-4 py-2 text-sm font-semibold text-foreground">
@@ -115,6 +125,16 @@ export default function KundaliBookingForm() {
             <ClipboardList className="h-4 w-4" /> View My Requests
           </Link>
         </div>
+      </div>
+
+        {/* Payment — the report is prepared once the fee is received and verified. */}
+        <PaymentPanel
+          kind="kundali"
+          service={SERVICE_NAME}
+          refId={result.id}
+          refCode={result.code}
+          defaults={{ name: result.name, phone: result.phone, email: result.email }}
+        />
       </div>
     );
   }
@@ -236,8 +256,8 @@ export default function KundaliBookingForm() {
       </button>
 
       <p className="text-center text-xs text-muted-foreground">
-        No online payment is required. Your details are kept confidential and used only to prepare
-        your report.
+        Payment details are shown on the next step. Your information is kept confidential and used
+        only to prepare your report.
       </p>
     </form>
   );

@@ -5,8 +5,10 @@ import Footer from '@/components/Footer';
 import FloatingButtons from '@/components/FloatingButtons';
 import { getUserId } from '@/lib/userSession';
 import { getRequestForUser, getStatusLogs } from '@/lib/kundali';
+import { listPaymentsForRef } from '@/lib/payments';
 import { STATUS_LABEL, STATUS_STYLE } from '@/lib/kundaliStatusMeta';
-import { ArrowLeft, Download, FileText, CheckCircle2, Clock } from 'lucide-react';
+import { PAYMENT_STATUS_LABEL, PAYMENT_STATUS_STYLE } from '@/lib/paymentMeta';
+import { ArrowLeft, Download, FileText, CheckCircle2, Clock, IndianRupee } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -39,6 +41,8 @@ export default async function RequestDetailPage({ params }) {
   if (!req) notFound();
 
   const logs = await getStatusLogs(id);
+  // A missing payments collection just means nothing has been paid yet.
+  const payments = await listPaymentsForRef(id).catch(() => []);
 
   return (
     <>
@@ -105,6 +109,56 @@ export default async function RequestDetailPage({ params }) {
               >
                 <Download className="h-4 w-4" /> Download Summary PDF
               </a>
+            </div>
+
+            {/* Payments */}
+            <div className="mt-6 rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
+              <h2 className="mb-4 flex items-center gap-2 font-serif text-xl font-bold text-foreground">
+                <IndianRupee className="h-5 w-5 text-primary" /> Payment
+              </h2>
+
+              {payments.length === 0 ? (
+                <div className="rounded-2xl border border-dashed border-border bg-muted/30 p-5">
+                  <p className="text-sm text-muted-foreground">
+                    No payment has been submitted for this request yet.
+                  </p>
+                  <Link
+                    href={`/payment?kind=kundali&refId=${req.id}&ref=${req.code}&service=${encodeURIComponent(req.service)}`}
+                    className="mt-3 inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white transition-all hover:bg-accent hover:text-foreground active:scale-95"
+                  >
+                    <IndianRupee className="h-4 w-4" /> Pay now
+                  </Link>
+                </div>
+              ) : (
+                <ul className="space-y-3">
+                  {payments.map((payment) => (
+                    <li
+                      key={payment.id}
+                      className="flex flex-wrap items-start justify-between gap-3 rounded-2xl border border-border bg-muted/30 p-4"
+                    >
+                      <div className="min-w-0">
+                        <p className="font-bold text-foreground">
+                          ₹{Number(payment.amount).toLocaleString('en-IN')}
+                        </p>
+                        <p className="mt-0.5 text-sm text-muted-foreground">
+                          UTR <span className="font-mono font-semibold">{payment.utr}</span> ·
+                          submitted {formatDateTime(payment.createdAt)}
+                        </p>
+                        {payment.reviewNote && (
+                          <p className="mt-1.5 text-sm text-muted-foreground">{payment.reviewNote}</p>
+                        )}
+                      </div>
+                      <span
+                        className={`shrink-0 rounded-full border px-3 py-1 text-xs font-semibold ${
+                          PAYMENT_STATUS_STYLE[payment.status] || ''
+                        }`}
+                      >
+                        {PAYMENT_STATUS_LABEL[payment.status] || payment.status}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
 
             {/* Birth details */}

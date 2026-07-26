@@ -12,8 +12,10 @@ import {
   StickyNote,
   Mail,
   Phone,
+  IndianRupee,
 } from 'lucide-react';
 import { KUNDALI_STATUSES, STATUS_LABEL, STATUS_STYLE } from '@/lib/kundaliStatusMeta';
+import { PAYMENT_STATUS_LABEL, PAYMENT_STATUS_STYLE } from '@/lib/paymentMeta';
 
 function formatDateTime(value) {
   if (!value) return '';
@@ -39,6 +41,7 @@ function DetailRow({ label, value }) {
 export default function KundaliAdminDetail({ id }) {
   const [request, setRequest] = useState(null);
   const [logs, setLogs] = useState([]);
+  const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -55,6 +58,7 @@ export default function KundaliAdminDetail({ id }) {
       if (!res.ok || !data.ok) throw new Error(data.error || 'Failed to load.');
       setRequest(data.request);
       setLogs(data.logs);
+      setPayments(data.payments || []);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -69,6 +73,7 @@ export default function KundaliAdminDetail({ id }) {
   function applyResult(data) {
     if (data.request) setRequest(data.request);
     if (data.logs) setLogs(data.logs);
+    if (data.payments) setPayments(data.payments);
   }
 
   async function patch(payload) {
@@ -183,6 +188,48 @@ export default function KundaliAdminDetail({ id }) {
                 <p className="mb-1 text-sm text-gray-500">Questions / Special requirements</p>
                 <p className="whitespace-pre-wrap rounded-lg bg-gray-50 p-3 text-sm text-gray-800">{request.questions}</p>
               </div>
+            )}
+          </div>
+
+          {/* Payments submitted against this request */}
+          <div className="rounded-2xl border border-gray-200 bg-white p-5">
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <h2 className="flex items-center gap-2 font-bold text-gray-900">
+                <IndianRupee className="h-4 w-4 text-amber-600" /> Payments
+              </h2>
+              <Link href="/admin/payments" className="text-sm font-semibold text-amber-700 hover:underline">
+                Verify in Payments →
+              </Link>
+            </div>
+
+            {payments.length === 0 ? (
+              <p className="text-sm text-gray-400">No payment submitted for this request yet.</p>
+            ) : (
+              <ul className="space-y-2">
+                {payments.map((p) => (
+                  <li
+                    key={p.id}
+                    className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-gray-50 p-3"
+                  >
+                    <div className="min-w-0">
+                      <p className="font-semibold text-gray-900">
+                        ₹{Number(p.amount).toLocaleString('en-IN')}{' '}
+                        <span className="font-mono text-sm font-normal text-gray-500">{p.utr}</span>
+                      </p>
+                      <p className="text-xs text-gray-400">
+                        {p.code} · {formatDateTime(p.createdAt)}
+                      </p>
+                    </div>
+                    <span
+                      className={`rounded-full border px-2.5 py-0.5 text-xs font-semibold ${
+                        PAYMENT_STATUS_STYLE[p.status] || ''
+                      }`}
+                    >
+                      {PAYMENT_STATUS_LABEL[p.status] || p.status}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             )}
           </div>
 

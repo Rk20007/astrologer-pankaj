@@ -35,7 +35,7 @@ export const podcasts = [
   },
 ];
 
-export const youtubeChannelUrl = 'https://www.youtube.com/@bhawnaupadhyay';
+export const youtubeChannelUrl = 'https://youtube.com/@vastubhawnaupadhyay';
 
 export const thumbnailUrl = (id) => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
 export const watchUrl = (id) => `https://youtu.be/${id}`;

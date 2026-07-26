@@ -12,6 +12,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, CheckCircle2, AlertCircle, CalendarDays, Loader2 } from 'lucide-react';
 import Button from '@/components/Button';
+import PaymentPanel from '@/components/PaymentPanel';
 
 const BookingModalContext = createContext(null);
 
@@ -176,30 +177,49 @@ function BookingForm({ booking, onClose }) {
     }`;
 
   if (status === 'sent') {
+    // A consultation with a known price goes straight to the payment step; an
+    // open-ended enquiry (gemstone, "on request" services) is quoted first.
+    const showPayment = needsSlot && typeof option.price === 'number';
+
     return (
-      <div className="p-8 text-center sm:p-10">
-        <CheckCircle2 className="mx-auto mb-5 h-14 w-14 text-primary" />
-        <h2 className="mb-3 font-serif text-2xl font-bold text-foreground">
-          {needsSlot ? 'Appointment requested' : 'Request received'}
-        </h2>
-        <p className="mx-auto mb-8 max-w-md leading-relaxed text-muted-foreground">
-          {needsSlot ? (
-            <>
-              Thank you. Your appointment for <span className="font-semibold">{option.label}</span> on{' '}
-              <span className="font-semibold">{date}</span> at{' '}
-              <span className="font-semibold">{formatSlot(slot)}</span> has been received. You will be
-              contacted to confirm and share payment details. Please allow up to 24 hours.
-            </>
-          ) : (
-            <>
-              Thank you. Your request has been received and you will get a reply with the available
-              options and payment details within 24 hours.
-            </>
-          )}
-        </p>
-        <Button variant="outline" size="md" onClick={onClose}>
-          Done
-        </Button>
+      <div className="max-h-[88vh] overflow-y-auto">
+        <div className="p-8 text-center sm:p-10">
+          <CheckCircle2 className="mx-auto mb-5 h-14 w-14 text-primary" />
+          <h2 className="mb-3 font-serif text-2xl font-bold text-foreground">
+            {needsSlot ? 'Appointment requested' : 'Request received'}
+          </h2>
+          <p className="mx-auto mb-8 max-w-md leading-relaxed text-muted-foreground">
+            {needsSlot ? (
+              <>
+                Thank you. Your appointment for <span className="font-semibold">{option.label}</span>{' '}
+                on <span className="font-semibold">{date}</span> at{' '}
+                <span className="font-semibold">{formatSlot(slot)}</span> has been received.
+                {showPayment
+                  ? ' Your slot is held once the payment below is verified.'
+                  : ' You will be contacted to confirm and share payment details. Please allow up to 24 hours.'}
+              </>
+            ) : (
+              <>
+                Thank you. Your request has been received and you will get a reply with the available
+                options and payment details within 24 hours.
+              </>
+            )}
+          </p>
+          <Button variant="outline" size="md" onClick={onClose}>
+            Done
+          </Button>
+        </div>
+
+        {showPayment && (
+          <div className="px-4 pb-6 sm:px-6">
+            <PaymentPanel
+              kind="consultation"
+              service={`${option.label} — ${date} ${formatSlot(slot)}`}
+              amount={option.price}
+              defaults={{ name: formData.name, phone: formData.phone, email: formData.email }}
+            />
+          </div>
+        )}
       </div>
     );
   }
@@ -397,8 +417,8 @@ function BookingForm({ booking, onClose }) {
           {status === 'sending' ? 'Sending…' : needsSlot ? 'Request Appointment' : 'Send Request'}
         </Button>
         <p className="mt-3 text-center text-xs text-muted-foreground">
-          No payment is taken online. Your details are kept confidential and you will be contacted
-          within 24 hours.
+          Payment details are shown on the next step. Your details are kept confidential and you will
+          be contacted within 24 hours.
         </p>
       </div>
     </form>

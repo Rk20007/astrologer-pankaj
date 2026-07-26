@@ -1,10 +1,15 @@
 import { Suspense } from 'react';
+import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import FloatingButtons from '@/components/FloatingButtons';
 import ContactForm from './ContactForm';
-import { contactInfo, phoneDigits, whatsappDigits } from '@/data/site';
-import { Mail, Phone, MapPin, Clock } from 'lucide-react';
+import { contactInfo, normaliseContacts } from '@/data/site';
+import { getContent } from '@/lib/content';
+import { Mail, Phone, MapPin, Clock, MessageCircle } from 'lucide-react';
+
+// The WhatsApp lines are editable in the admin panel, so render per request.
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'Contact & Booking | Bhawna Upadhyay',
@@ -13,13 +18,14 @@ export const metadata = {
 };
 
 const details = [
-  { icon: Phone, label: 'Phone', value: contactInfo.phone, href: `tel:${phoneDigits}` },
   { icon: Mail, label: 'Email', value: contactInfo.email, href: `mailto:${contactInfo.email}` },
   { icon: MapPin, label: 'Location', value: contactInfo.address },
   { icon: Clock, label: 'Hours', value: contactInfo.hours },
 ];
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const contacts = normaliseContacts(await getContent('whatsappContacts'));
+
   return (
     <>
       <Navbar />
@@ -44,6 +50,43 @@ export default function ContactPage() {
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
               {/* Contact details */}
               <div className="space-y-6">
+                {/* Call / WhatsApp lines — the team answers on all three. */}
+                <div className="rounded-3xl border border-border bg-card p-6">
+                  <p className="mb-4 flex items-center gap-2 text-sm font-bold text-foreground">
+                    <Phone className="h-4 w-4 text-primary" /> Call or WhatsApp
+                  </p>
+                  <ul className="space-y-3">
+                    {contacts.map((contact) => (
+                      <li
+                        key={contact.id}
+                        className="rounded-2xl border border-border bg-background/60 p-4"
+                      >
+                        <p className="font-semibold text-foreground">{contact.name}</p>
+                        <p className="text-xs text-muted-foreground">{contact.role}</p>
+                        <p className="mt-1.5 font-mono text-sm font-bold text-primary">
+                          {contact.phone}
+                        </p>
+                        <div className="mt-3 flex gap-2">
+                          <a
+                            href={contact.whatsapp}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-green-600 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-green-700"
+                          >
+                            <MessageCircle className="h-4 w-4" /> WhatsApp
+                          </a>
+                          <a
+                            href={contact.tel}
+                            className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-primary px-3 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary hover:text-white"
+                          >
+                            <Phone className="h-4 w-4" /> Call
+                          </a>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
                 <div className="rounded-3xl border border-border bg-card p-6">
                   {details.map(({ icon: Icon, label, value, href }) => (
                     <div key={label} className="mb-7 flex items-start gap-4 last:mb-0">
@@ -65,21 +108,18 @@ export default function ContactPage() {
                   ))}
                 </div>
 
-                <div className="space-y-3 rounded-3xl border border-border bg-card p-6">
-                  <a
-                    href={`https://wa.me/${whatsappDigits}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block w-full rounded-lg bg-green-600 py-3 text-center font-semibold text-white transition-colors hover:bg-green-700"
+                <div className="rounded-3xl border border-accent/40 bg-primary/5 p-6">
+                  <p className="font-semibold text-foreground">Already been quoted a price?</p>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Pay by scanning our UPI QR code and submit the transaction reference for
+                    verification.
+                  </p>
+                  <Link
+                    href="/payment"
+                    className="mt-4 block w-full rounded-lg bg-primary py-3 text-center font-semibold text-white transition-colors hover:bg-accent hover:text-foreground"
                   >
-                    Chat on WhatsApp
-                  </a>
-                  <a
-                    href={`tel:${phoneDigits}`}
-                    className="block w-full rounded-lg bg-primary py-3 text-center font-semibold text-white transition-colors hover:bg-accent hover:text-foreground"
-                  >
-                    Call Now
-                  </a>
+                    Make a Payment
+                  </Link>
                 </div>
               </div>
 

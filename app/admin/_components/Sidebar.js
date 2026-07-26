@@ -10,6 +10,7 @@ import {
   FileText,
   ScrollText,
   ImageIcon,
+  IndianRupee,
   LogOut,
   ExternalLink,
   Menu,
@@ -19,6 +20,7 @@ import {
 const NAV = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
   { href: '/admin/leads', label: 'Leads & Bookings', icon: Inbox },
+  { href: '/admin/payments', label: 'Payments', icon: IndianRupee },
   { href: '/admin/kundali', label: 'Kundali PDF', icon: ScrollText },
   { href: '/admin/availability', label: 'Availability', icon: CalendarClock },
   { href: '/admin/content', label: 'Website Content', icon: FileText },

@@ -7,6 +7,7 @@ import HomeTestimonials from '@/components/home/Testimonials';
 import HomeStats from '@/components/home/Stats';
 import HomeAchievements from '@/components/home/Achievements';
 import HomePodcasts from '@/components/home/Podcasts';
+import HomeReels from '@/components/home/Reels';
 import HomeCTA from '@/components/home/CTA';
 import { getContent } from '@/lib/content';
 
@@ -22,9 +23,10 @@ export const metadata = {
 export default async function Page() {
   // Content is loaded from the CMS (MongoDB) with a fall back to the defaults
   // baked into /data, so the page renders even if the DB is unreachable.
-  const [statsData, achievementsData] = await Promise.all([
+  const [statsData, achievementsData, reelsData] = await Promise.all([
     getContent('stats'),
     getContent('achievements'),
+    getContent('reels'),
   ]);
 
   return (
@@ -36,6 +38,7 @@ export default async function Page() {
         <HomeServices />
         <HomeAchievements data={achievementsData} />
         <HomePodcasts />
+        <HomeReels reels={reelsData} />
         <HomeTestimonials />
         <HomeCTA />
       </main>
