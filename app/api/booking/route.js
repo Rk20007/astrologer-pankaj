@@ -7,6 +7,7 @@ import {
   isValidDate,
   isValidTime,
   resolveConsultant,
+  todayStr,
   CONSULTANTS,
 } from '@/lib/availability';
 
@@ -432,8 +433,7 @@ export async function POST(request) {
     // date, a closed day, an off date, or an already-taken slot) before we try
     // to reserve it. The unique index closes the final race at insert time.
     if (kind === 'consultation') {
-      const today = new Date().toISOString().slice(0, 10);
-      if (clean.date < today) {
+      if (clean.date < todayStr()) {
         return NextResponse.json(
           { ok: false, errors: { date: 'That date has already passed.' } },
           { status: 400 }
@@ -452,10 +452,15 @@ export async function POST(request) {
         );
       }
       if (!match.available) {
-        return NextResponse.json(
-          { ok: false, errors: { slot: 'That slot has just been booked. Please pick another.' } },
-          { status: 409 }
-        );
+        // Say why, so the visitor knows whether to pick a later time or another
+        // day: the slot may be booked, switched off by the admin, or gone by.
+        const message =
+          match.reason === 'past'
+            ? 'That time has already passed. Please pick a later slot.'
+            : match.reason === 'blocked'
+              ? 'That time is not available. Please pick another.'
+              : 'That slot has just been booked. Please pick another.';
+        return NextResponse.json({ ok: false, errors: { slot: message } }, { status: 409 });
       }
     }
 

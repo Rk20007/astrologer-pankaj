@@ -11,6 +11,7 @@ import {
   ScrollText,
   ImageIcon,
   IndianRupee,
+  KeyRound,
   LogOut,
   ExternalLink,
   Menu,
@@ -25,6 +26,7 @@ const NAV = [
   { href: '/admin/availability', label: 'Availability', icon: CalendarClock },
   { href: '/admin/content', label: 'Website Content', icon: FileText },
   { href: '/admin/images', label: 'Images', icon: ImageIcon },
+  { href: '/admin/account', label: 'Login & Password', icon: KeyRound },
 ];
 
 function isActive(pathname, item) {

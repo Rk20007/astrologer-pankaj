@@ -23,7 +23,8 @@ export const metadata = {
 export default async function Page() {
   // Content is loaded from the CMS (MongoDB) with a fall back to the defaults
   // baked into /data, so the page renders even if the DB is unreachable.
-  const [statsData, achievementsData, reelsData] = await Promise.all([
+  const [bannerData, statsData, achievementsData, reelsData] = await Promise.all([
+    getContent('homeBanner'),
     getContent('stats'),
     getContent('achievements'),
     getContent('reels'),
@@ -33,7 +34,7 @@ export default async function Page() {
     <>
       <Navbar />
       <main className="min-h-screen">
-        <HomeHero />
+        <HomeHero banner={bannerData} />
         <HomeStats stats={statsData} />
         <HomeServices />
         <HomeAchievements data={achievementsData} />

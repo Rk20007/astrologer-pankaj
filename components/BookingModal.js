@@ -31,6 +31,13 @@ function resolveConsultant(id) {
   return CONSULTANT_ALIASES[id] || null;
 }
 
+// Why a time cannot be picked — shown as the tooltip on a disabled slot.
+const UNAVAILABLE_LABEL = {
+  booked: 'Already booked',
+  blocked: 'Not available',
+  past: 'This time has passed',
+};
+
 export function useBookingModal() {
   const ctx = useContext(BookingModalContext);
   if (!ctx) throw new Error('useBookingModal must be used inside <BookingModalProvider>');
@@ -281,29 +288,37 @@ function BookingForm({ booking, onClose }) {
                 )}
 
                 {!slotState.loading && !slotState.closed && slotState.slots.length > 0 && (
-                  <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
-                    {slotState.slots.map((s) => (
-                      <button
-                        key={s.time}
-                        type="button"
-                        disabled={!s.available}
-                        onClick={() => {
-                          setSlot(s.time);
-                          setErrors((prev) => (prev.slot ? { ...prev, slot: undefined } : prev));
-                        }}
-                        className={`rounded-lg border px-2 py-2 text-sm font-medium transition-all ${
-                          !s.available
-                            ? 'cursor-not-allowed border-border bg-muted text-muted-foreground/50 line-through'
-                            : slot === s.time
-                              ? 'border-primary bg-primary text-white shadow-sm'
-                              : 'border-border bg-background text-foreground hover:border-primary/60 hover:bg-primary/5'
-                        }`}
-                        title={s.available ? '' : 'Already booked'}
-                      >
-                        {formatSlot(s.time)}
-                      </button>
-                    ))}
-                  </div>
+                  <>
+                    <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+                      {slotState.slots.map((s) => (
+                        <button
+                          key={s.time}
+                          type="button"
+                          disabled={!s.available}
+                          aria-disabled={!s.available}
+                          onClick={() => {
+                            setSlot(s.time);
+                            setErrors((prev) => (prev.slot ? { ...prev, slot: undefined } : prev));
+                          }}
+                          className={`rounded-lg border px-2 py-2 text-sm font-medium transition-all ${
+                            !s.available
+                              ? 'cursor-not-allowed border-border bg-muted text-muted-foreground/50 line-through'
+                              : slot === s.time
+                                ? 'border-primary bg-primary text-white shadow-sm'
+                                : 'border-border bg-background text-foreground hover:border-primary/60 hover:bg-primary/5'
+                          }`}
+                          title={s.available ? '' : UNAVAILABLE_LABEL[s.reason] || 'Not available'}
+                        >
+                          {formatSlot(s.time)}
+                        </button>
+                      ))}
+                    </div>
+                    {slotState.slots.every((s) => !s.available) && (
+                      <p className="mt-2 rounded-lg bg-muted px-4 py-3 text-sm text-muted-foreground">
+                        Every time on this day is taken. Please pick another date.
+                      </p>
+                    )}
+                  </>
                 )}
 
                 {!slotState.loading && !slotState.closed && slotState.slots.length === 0 && (

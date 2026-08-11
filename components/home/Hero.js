@@ -5,9 +5,14 @@ import Link from 'next/link';
 import Button from '@/components/Button';
 import SmartImage from '@/components/SmartImage';
 import { useAppointmentModal } from '@/components/AppointmentModal';
+import { homeBanner as defaultBanner } from '@/data/homeBanner';
 
-export default function HomeHero() {
+export default function HomeHero({ banner }) {
   const { open: openAppointment } = useAppointmentModal();
+  // Every field falls back to the built-in default, so clearing one in the
+  // admin panel can never leave the banner half-rendered.
+  const b = { ...defaultBanner, ...(banner || {}) };
+  const trustBadges = Array.isArray(b.trustBadges) ? b.trustBadges : defaultBanner.trustBadges;
 
   return (
     // The navbar is fixed and already leaves a 4rem spacer above this section,
@@ -71,7 +76,7 @@ export default function HomeHero() {
               className="inline-block"
             >
               <span className="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold uppercase tracking-wide">
-                Bhawna Upadhyay • TEDx Speaker
+                {b.badge}
               </span>
             </motion.div>
 
@@ -81,9 +86,9 @@ export default function HomeHero() {
               transition={{ delay: 0.3 }}
               className="font-serif text-5xl sm:text-6xl font-bold text-foreground leading-tight"
             >
-              Shift Your Aura with{' '}
+              {b.heading}{' '}
               <span className="bg-gradient-to-r from-primary via-gold-light to-accent bg-clip-text text-transparent">
-                Bhawna Upadhyay
+                {b.headingHighlight}
               </span>
             </motion.h1>
 
@@ -93,7 +98,7 @@ export default function HomeHero() {
               transition={{ delay: 0.4 }}
               className="text-lg text-muted-foreground leading-relaxed max-w-xl"
             >
-              A TEDx speaker, astrologer, and Vastu consultant with 15+ years of experience, Bhawna Upadhyay blends ancient Vedic wisdom with modern insight — offering personalised astrology, Kundli, and Vastu guidance to transform your life.
+              {b.description}
             </motion.p>
 
             {/* CTA Buttons */}
@@ -103,14 +108,18 @@ export default function HomeHero() {
               transition={{ delay: 0.5 }}
               className="flex flex-col sm:flex-row gap-4 pt-4"
             >
-              <Link href="/services">
-                <Button variant="primary" size="lg">
-                  Explore Services
+              {b.primaryButtonLabel && (
+                <Link href={b.primaryButtonHref || '/services'}>
+                  <Button variant="primary" size="lg">
+                    {b.primaryButtonLabel}
+                  </Button>
+                </Link>
+              )}
+              {b.secondaryButtonLabel && (
+                <Button variant="outline" size="lg" onClick={openAppointment}>
+                  {b.secondaryButtonLabel}
                 </Button>
-              </Link>
-              <Button variant="outline" size="lg" onClick={openAppointment}>
-                Book Consultation
-              </Button>
+              )}
             </motion.div>
 
             {/* Trust Badges */}
@@ -118,20 +127,14 @@ export default function HomeHero() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
-              className="flex gap-6 pt-4 text-sm text-muted-foreground"
+              className="flex flex-wrap gap-6 pt-4 text-sm text-muted-foreground"
             >
-              <div className="flex items-center gap-2">
-                <span className="text-2xl text-primary font-bold">20+</span>
-                <span className="text-xs">Years of<br />Experience</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-2xl text-primary font-bold">5000+</span>
-                <span className="text-xs">Happy<br />Clients</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-2xl text-primary font-bold">100%</span>
-                <span className="text-xs">Satisfaction<br />Guaranteed</span>
-              </div>
+              {trustBadges.map((badge, i) => (
+                <div key={`${badge.value}-${i}`} className="flex items-center gap-2">
+                  <span className="text-2xl text-primary font-bold">{badge.value}</span>
+                  <span className="text-xs">{badge.label}</span>
+                </div>
+              ))}
             </motion.div>
           </motion.div>
           
@@ -140,14 +143,14 @@ export default function HomeHero() {
           <div className="relative flex items-center justify-center">
             <div className="relative w-full aspect-[4/5] sm:aspect-[3/4] rounded-3xl overflow-hidden ring-1 ring-accent/40 shadow-[0_20px_60px_rgba(212,175,55,0.3)]">
               <SmartImage
-                src="/bhawana-012.jpeg"
-                alt="Bhawna Upadhyay — Astrologer & Vastu Consultant"
+                src={b.image}
+                alt={b.altText || b.captionName || ''}
                 className="w-full h-full object-cover object-center"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
               <div className="absolute bottom-5 left-5 right-5 text-white">
-                <p className="font-serif text-2xl font-bold drop-shadow">Bhawna Upadhyay</p>
-                <p className="text-sm text-white/90 drop-shadow">Astrologer &amp; Vastu Consultant • TEDx Speaker</p>
+                <p className="font-serif text-2xl font-bold drop-shadow">{b.captionName}</p>
+                <p className="text-sm text-white/90 drop-shadow">{b.captionLine}</p>
               </div>
             </div>
           </div>

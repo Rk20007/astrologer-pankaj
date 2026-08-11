@@ -1,5 +1,11 @@
 import { NextResponse } from 'next/server';
-import { getAvailabilityConfig, buildDaySlots, isValidDate, resolveConsultant } from '@/lib/availability';
+import {
+  getAvailabilityConfig,
+  buildDaySlots,
+  isValidDate,
+  resolveConsultant,
+  todayStr,
+} from '@/lib/availability';
 import { getBookedSlots } from '@/lib/leads';
 
 export const runtime = 'nodejs';
@@ -24,8 +30,7 @@ export async function GET(request) {
   }
 
   // Never offer slots in the past.
-  const today = new Date().toISOString().slice(0, 10);
-  if (date < today) {
+  if (date < todayStr()) {
     return NextResponse.json({ ok: true, date, closed: true, reason: 'past', slots: [] });
   }
 

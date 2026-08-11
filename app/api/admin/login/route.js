@@ -8,7 +8,7 @@ export async function POST(request) {
   const username = typeof body?.username === 'string' ? body.username : '';
   const password = typeof body?.password === 'string' ? body.password : '';
 
-  if (!checkCredentials(username, password)) {
+  if (!(await checkCredentials(username, password))) {
     return NextResponse.json(
       { ok: false, error: 'Incorrect username or password.' },
       { status: 401 }

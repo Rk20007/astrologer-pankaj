@@ -14,10 +14,13 @@ export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const status = searchParams.get('status') || undefined;
   const kind = searchParams.get('kind') || undefined;
+  // ?missed=1 → only appointments whose time has passed and that are still
+  // open, i.e. the ones that need rescheduling.
+  const missed = searchParams.get('missed') === '1';
 
   try {
     const [leads, stats] = await Promise.all([
-      listLeads({ status, kind }),
+      listLeads({ status, kind, missed }),
       getLeadStats(),
     ]);
     return NextResponse.json({ ok: true, leads, stats });

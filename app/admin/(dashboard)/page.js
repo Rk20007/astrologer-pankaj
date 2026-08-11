@@ -1,5 +1,14 @@
 import Link from 'next/link';
-import { Inbox, CalendarClock, Clock, ArrowRight, FileText, ImageIcon, IndianRupee } from 'lucide-react';
+import {
+  Inbox,
+  CalendarClock,
+  Clock,
+  ArrowRight,
+  FileText,
+  ImageIcon,
+  IndianRupee,
+  AlertTriangle,
+} from 'lucide-react';
 import { getLeadStats, listLeads } from '@/lib/leads';
 import { getPaymentStats } from '@/lib/payments';
 
@@ -11,7 +20,9 @@ const STATUS_STYLE = {
   new: 'bg-amber-100 text-amber-800',
   contacted: 'bg-blue-100 text-blue-800',
   confirmed: 'bg-emerald-100 text-emerald-800',
+  rescheduled: 'bg-violet-100 text-violet-800',
   completed: 'bg-gray-100 text-gray-700',
+  missed: 'bg-orange-100 text-orange-800',
   cancelled: 'bg-red-100 text-red-700',
 };
 
@@ -31,7 +42,7 @@ async function loadData() {
     return { stats, recent, payments, error: false };
   } catch {
     return {
-      stats: { total: 0, new: 0, upcoming: 0, statusCounts: {} },
+      stats: { total: 0, new: 0, upcoming: 0, missed: 0, statusCounts: {} },
       recent: [],
       payments: { total: 0, statusCounts: {}, approvedAmount: 0 },
       error: true,
@@ -79,6 +90,28 @@ export default async function AdminDashboard() {
         <StatCard icon={CalendarClock} label="Upcoming appointments" value={stats.upcoming} accent="text-emerald-600" tint="bg-emerald-100 text-emerald-700" />
         <StatCard icon={IndianRupee} label="Payments to verify" value={pendingPayments} accent="text-violet-600" tint="bg-violet-100 text-violet-700" />
       </div>
+
+      {stats.missed > 0 && (
+        <Link
+          href="/admin/leads"
+          className="mt-4 flex items-center justify-between gap-3 rounded-2xl border border-orange-200 bg-orange-50 px-5 py-4 transition-colors hover:bg-orange-100"
+        >
+          <span className="flex items-center gap-3">
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-orange-200 text-orange-800">
+              <AlertTriangle className="h-5 w-5" />
+            </span>
+            <span>
+              <span className="block font-semibold text-orange-900">
+                {stats.missed} appointment{stats.missed === 1 ? '' : 's'} missed
+              </span>
+              <span className="block text-sm text-orange-700">
+                Their time has gone by and they are still open — reschedule or close them off.
+              </span>
+            </span>
+          </span>
+          <ArrowRight className="h-5 w-5 shrink-0 text-orange-700" />
+        </Link>
+      )}
 
       {pendingPayments > 0 && (
         <Link
